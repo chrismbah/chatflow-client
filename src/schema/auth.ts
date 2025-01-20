@@ -11,11 +11,23 @@ export const signUpSchema = yup.object().shape({
     .min(6, "Password must be at least 6 characters")
     .max(20, "Password should not be more than 20 characters")
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*_?&]{6,20}$/,
+      /^[A-Za-z\d@$!%*_?&]{6,20}$/,
       "Password must contain at least one letter and number"
     )
     .required("Please enter your password"),
 });
 
+export const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Please enter a valid email address")
+    .required("Please enter your email"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(20, "Password should not be more than 20 characters")
+    .required("Please enter your password"),
+});
 
 export type SignUpSchema = yup.InferType<typeof signUpSchema>;
+export type LoginSchema = yup.InferType<typeof loginSchema>;

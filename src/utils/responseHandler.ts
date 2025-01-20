@@ -1,6 +1,9 @@
 export type IError = Error & {
   response: {
     data: {
+      data: {
+        message: string;
+      };
       message: string;
       error: string;
     };
@@ -16,9 +19,9 @@ export const errorHandler = (
   err: Error & {
     response: {
       data: {
-        data:{
-          message: string
-        },
+        data: {
+          message: string;
+        };
         message: string;
         error: string;
       };
