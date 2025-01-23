@@ -3,7 +3,7 @@ import { User } from "../types/user";
 
 interface UserState {
   user: User | null;
-  setUser: (user: User | null) => void;
+  setUser: (user: User) => void;
   clearUser: () => void;
 }
 

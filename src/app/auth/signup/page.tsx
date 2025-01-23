@@ -4,9 +4,10 @@ import UserAdd from "@/components/icons/UserAdd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpSchema, signUpSchema } from "../../../schema/auth";
-import Loader from "@/components/Loader";
+import Loader from "@/components/ui/loader/Loader";
 import { useSignup } from "@/hooks/use-signup";
 import { handleGoogleRedirect } from "@/utils";
+import Link from "next/link";
 
 const Signup = () => {
   const {
@@ -26,10 +27,13 @@ const Signup = () => {
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className="flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">Sign Up</h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">Chat-A-Tive</h1>
             <div className="w-full flex-1 mt-8">
               <div className="flex flex-col items-center">
-                <button onClick={handleGoogleRedirect} className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                <button
+                  onClick={handleGoogleRedirect}
+                  className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
+                >
                   <div className="bg-white p-2 rounded-full">
                     <GoogleIcon />
                   </div>
@@ -102,12 +106,12 @@ const Signup = () => {
                 </button>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   Have an account?{" "}
-                  <a
+                  <Link
                     href="/auth/login"
                     className="border-b border-gray-500 border-dotted"
                   >
                     Login
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { User } from "../types/user";
 
 interface ProfileResponse {
-  user: User;
+  data: User;
 }
 
 export const useProfile = () => {
@@ -14,19 +14,20 @@ export const useProfile = () => {
   const { data, error, isLoading, refetch } = useQuery<ProfileResponse>({
     queryKey: ["getUserProfile"],
     queryFn: getUserProfile,
+    retry: true,
   });
 
   // Use effect to sync Zustand state with the fetched user data
   useEffect(() => {
-    if (data?.user) {
-      setUser(data.user);
+    if (data) {
+      setUser(data.data);
     }
   }, [data, setUser]);
 
   return {
-    user: data?.user ?? null,
-    isError: !!error,
-    isLoading,
+    user: data?.data ?? null,
+    isUserError: !!error,
+    isUserLoading: isLoading,
     refetch,
   };
 };

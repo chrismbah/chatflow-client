@@ -4,7 +4,7 @@ import UserAdd from "@/components/icons/UserAdd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema, loginSchema } from "../../../schema/auth";
-import Loader from "@/components/Loader";
+import Loader from "@/components/ui/loader/Loader";
 import { useLogin } from "@/hooks/use-login";
 import { handleGoogleRedirect } from "@/utils";
 
@@ -27,7 +27,7 @@ export default function Login() {
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex flex-row-reverse justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className="flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">Login</h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">Chat-A-Tive</h1>
             <div className="w-full flex-1 mt-8">
               <div className="flex flex-col items-center">
                 <button
@@ -47,7 +47,10 @@ export default function Login() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xs" >
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="mx-auto max-w-xs"
+              >
                 <div>
                   <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-3"

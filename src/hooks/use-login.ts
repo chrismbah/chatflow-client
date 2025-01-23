@@ -19,8 +19,8 @@ export const useLogin = () => {
     onSuccess: (data: LoginResponse) => {
       const user = data.user;
       setUser(user);
-      toast.success(`Login successful.`);
       router.push("/chat");
+      toast.success(`Login successful.`);
     },
     onError: (error: IError) => {
       toast.error(errorHandler(error));

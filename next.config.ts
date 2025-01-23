@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/public/**", // Adjusted to match `/public`
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com", // Google profile images
+        port: "",
+        pathname: "/**", // Allows all paths under this domain
+      },
     ],
   },
 };

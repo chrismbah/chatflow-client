@@ -6,7 +6,7 @@ export default function Home() {
           Connect, Chat and Collaborate
         </h1>
         <p className="mb-8 text-lg font-normal lg:text-xl sm:px-16 xl:px-48 text-gray-500">
-          Welcome to ChatFlow—your platform for seamless conversations and
+          Welcome to Chat-A-Tive—your platform for seamless conversations and
           real-time collaboration. Stay connected with friends, family, and
           teams anytime, anywhere.
         </p>
