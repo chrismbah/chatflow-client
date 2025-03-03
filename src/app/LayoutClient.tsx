@@ -1,7 +1,6 @@
 // src/app/LayoutClient.tsx (Client Component)
 "use client";
-
-import { toastOption } from "../config/toast";
+import { toastOptions } from "../config/toast";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -14,7 +13,7 @@ export default function LayoutClient({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster toastOptions={toastOption} />
+      <Toaster toastOptions={toastOptions} position="bottom-left" />
       {children}
     </QueryClientProvider>
   );

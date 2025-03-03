@@ -1,29 +1,30 @@
 import React from "react";
-import Image from "next/image";
 import { useProfile } from "@/hooks/use-profile";
+import Image from "next/image";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { Chat } from "@/types/user";
 
-interface User {
-  _id: string;
-  fullName: string;
-  email: string;
-  avatar: string;
-}
-
-interface Chat {
-  _id: string;
-  users: User[];
-}
-
-const ChatList = ({ chats }: { chats: Chat[] }) => {
+const ChatList = ({
+  chats,
+  accessChat,
+}: {
+  chats: Chat[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  accessChat: UseMutateFunction<any, Error, string, unknown>;
+}) => {
   const { user } = useProfile();
-
+  const accessUserChat = (userId: string) => {
+    const res = accessChat(userId);
+    console.log("User Chat", res);
+  };
   return (
-    <ul>
+    <div>
       {chats.map((chat) =>
         chat.users
           .filter((member) => member._id !== user?._id) // Exclude the current user
           .map((member, i) => (
-            <li
+            <div
+              onClick={() => accessUserChat(member._id)}
               key={member._id}
               className="flex items-center justify-between p-4 hover:bg-gray-100 transition duration-100 cursor-pointer relative"
             >
@@ -31,9 +32,9 @@ const ChatList = ({ chats }: { chats: Chat[] }) => {
                 <Image
                   src={member.avatar}
                   alt={member.fullName}
-                  className="w-10 h-10 rounded-full"
                   width={40}
                   height={40}
+                  className="rounded-full"
                 />
                 <div className="flex flex-col w-[65%]">
                   <p
@@ -42,11 +43,8 @@ const ChatList = ({ chats }: { chats: Chat[] }) => {
                   >
                     {member.fullName}
                   </p>
-                  <p
-                    className="text-sm text-gray-500 truncate"
-                    title={`Hey I'm ${member.fullName}. What's your name?`} // Tooltip for message
-                  >
-                    {`Hey I'm ${member.fullName}. What's your name?`}
+                  <p className="text-[12px] truncate italic text-gray-400 font-normal">
+                    Tap to start a new chat.
                   </p>
                 </div>
               </div>
@@ -56,10 +54,10 @@ const ChatList = ({ chats }: { chats: Chat[] }) => {
                   {i + 1}
                 </span>
               </div>
-            </li>
+            </div>
           ))
       )}
-    </ul>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,5 +13,19 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('tailwind-scrollbar')({ preferredStrategy: 'pseudoelements' }),
+    function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          "-ms-overflow-style": "none" /* IE and Edge */,
+          "scrollbar-width": "none" /* Firefox */,
+        },
+        ".hide-scrollbar::-webkit-scrollbar": {
+          display: "none" /* Chrome, Safari and Opera */,
+        },
+      });
+    },
+  ],
 } satisfies Config;

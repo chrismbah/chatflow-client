@@ -5,7 +5,13 @@ export const getUserProfile = async () => {
   return res.data;
 };
 
-export const getUsers = async () => {
-  const res = await axiosInstance.get("/users");
-  return res.data.data;
+export const getUsers = async (page: number, limit: number, search?: string) => {
+  const res = await axiosInstance.get("/users", {
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+  return res.data.data; // Ensure the API returns { users: User[], pagination: { totalPages, totalUsers, etc. } }
 };

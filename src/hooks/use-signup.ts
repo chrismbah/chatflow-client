@@ -20,8 +20,9 @@ export const useSignup = () => {
     onSuccess: (data: SignupResponse) => {
       const user = data.user;
       setUser(user);
-      toast.success(`Registration successful.`);
       router.push("/auth/login");
+      toast.success(`Registration successful.`);
+
     },
     onError: (error: IError) => {
       toast.error(errorHandler(error));

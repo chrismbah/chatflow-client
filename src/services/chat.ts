@@ -5,7 +5,7 @@ export const fetchAllChats = async () => {
   return res.data.data;
 };
 
-export const createChat = async (userId: string) => {
+export const createOrAccessChat = async (userId: string) => {
   const res = await axiosInstance.post("/chat", { userId });
   return res.data.data;
 };

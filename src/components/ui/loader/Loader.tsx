@@ -2,7 +2,7 @@ const Loader = ({ className }: { className?: string }) => {
   return (
     <svg
       aria-hidden="true"
-      className={`inline w-5 h-5 text-white animate-spin ${className}`}
+      className={`inline w-5 h-5  animate-spin text-white ${className}`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
