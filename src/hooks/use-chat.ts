@@ -9,6 +9,7 @@ export const useChat = () => {
   const [loadingUsers, setLoadingUsers] = useState<string[]>([]);
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const queryClient = useQueryClient();
+
   const {
     data: chatsData = [],
     error: isChatsError,
@@ -56,9 +57,9 @@ export const useChat = () => {
     isError: isAccessingChatError,
   } = useMutation({
     mutationFn: createOrAccessChat,
-    onSuccess: (data) => {
+    onSuccess: (data, userId) => {
+      queryClient.setQueryData(["chat", userId], data);
       setCurrentChat(data);
-      console.log(data);
     },
     onError: (error) => {
       console.error("Error creating chat", error);
@@ -78,6 +79,6 @@ export const useChat = () => {
     accessChat,
     isAccessingChat,
     isAccessingChatError,
-    currentChat,
+    currentChat, setCurrentChat
   };
 };

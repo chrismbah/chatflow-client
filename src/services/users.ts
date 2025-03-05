@@ -13,5 +13,5 @@ export const getUsers = async (page: number, limit: number, search?: string) => 
       search,
     },
   });
-  return res.data.data; // Ensure the API returns { users: User[], pagination: { totalPages, totalUsers, etc. } }
+  return res.data.data;
 };

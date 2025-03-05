@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import { AiOutlinePaperClip } from "react-icons/ai";
@@ -6,22 +5,22 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 import { BsEmojiSmile } from "react-icons/bs";
 import { Chat } from "@/types/user";
 import { useProfile } from "@/hooks/use-profile";
-
+import Image from "next/image";
 const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
   const { user, isUserLoading } = useProfile();
 
   if (isUserLoading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (!user) {
-    return <div>User not found.</div>; 
+    return <div>User not found.</div>;
   }
 
   // Find the other user in the chat
-  const otherUser = currentChat.users.find((u) => u._id !== user._id);
+  const reciever = currentChat.users.find((u) => u._id !== user._id);
 
-  if (!otherUser) {
+  if (!reciever) {
     return <div>Chat data is invalid.</div>; // Handle the case where the other user is not found
   }
 
@@ -31,13 +30,16 @@ const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
       <header className="flex items-center justify-between p-4 bg-white shadow">
         <div className="flex items-center space-x-4">
           <FiArrowLeft className="w-5 h-5 text-gray-500 sm:hidden" />
-          <img
-            src={otherUser.avatar}
-            alt={otherUser.fullName}
-            className="w-10 h-10 rounded-full"
+          <Image
+            src={reciever.avatar}
+            alt={reciever.fullName}
+            width={40}
+            height={40}
+            className="rounded-full"
+            priority // Ensures it loads fast
           />
           <h2 className="text-lg font-semibold text-gray-900">
-            {otherUser.fullName}
+            {reciever.fullName}
           </h2>
         </div>
         <div className="flex items-center space-x-4">

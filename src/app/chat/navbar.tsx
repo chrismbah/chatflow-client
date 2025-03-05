@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import { FiSettings } from "react-icons/fi";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { AvatarSkeleton } from "@/components/ui/skeleton";
 import { User } from "@/types/user";
+import Image from "next/image";
 
 const Navbar = ({
   isUserLoading,
@@ -18,10 +18,12 @@ const Navbar = ({
         <AvatarSkeleton />
       ) : (
         user && (
-          <img
+          <Image
             src={user.avatar}
-            alt="Profile"
-            className="w-8 h-8 rounded-full"
+            alt={user.fullName}
+            width={32}
+            height={32}
+            className="rounded-full"
           />
         )
       )}
