@@ -4,7 +4,7 @@ import { createOrAccessChat, fetchAllChats } from "@/services/chat";
 import toast from "react-hot-toast";
 import { responseHandler } from "@/utils/responseHandler";
 import { Chat } from "@/types/user";
-
+import { CHATS, USERS } from "@/constants/query-keys";
 export const useChat = () => {
   const [loadingUsers, setLoadingUsers] = useState<string[]>([]);
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
@@ -16,7 +16,7 @@ export const useChat = () => {
     isLoading: isFetchingChats,
     refetch: refetchChats,
   } = useQuery({
-    queryKey: ["fetchAllChats"],
+    queryKey: [CHATS.FETCH_CHATS],
     queryFn: fetchAllChats,
   });
 
@@ -34,13 +34,15 @@ export const useChat = () => {
       // Remove user ID from loading list on success
       setLoadingUsers((prev) => prev.filter((id) => id !== userId));
       queryClient.invalidateQueries({
-        queryKey: ["fetchAllChats"],
-        exact: true, // Ensures that only this specific query is invalidated
+        queryKey: [CHATS.FETCH_CHATS],
+        exact: true,
       });
       queryClient.invalidateQueries({
-        queryKey: ["getUsers"],
-        exact: true, // Ensures that only this specific query is invalidated
+        // Doesnt refresh the users list
+        queryKey: [USERS.FETCH_USERS],
+        exact: true,
       });
+      queryClient.refetchQueries({ queryKey: [USERS.FETCH_USERS] }); // Force fetch
       toast.success("User Added Successfully");
     },
     onError: (error, userId) => {
@@ -58,7 +60,7 @@ export const useChat = () => {
   } = useMutation({
     mutationFn: createOrAccessChat,
     onSuccess: (data, userId) => {
-      queryClient.setQueryData(["chat", userId], data);
+      queryClient.setQueryData([CHATS.CURRENT_CHAT, userId], data);
       setCurrentChat(data);
     },
     onError: (error) => {
@@ -79,6 +81,7 @@ export const useChat = () => {
     accessChat,
     isAccessingChat,
     isAccessingChatError,
-    currentChat, setCurrentChat
+    currentChat,
+    setCurrentChat,
   };
 };

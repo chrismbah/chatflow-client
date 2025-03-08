@@ -7,15 +7,63 @@ import { useChat } from "@/hooks/use-chat";
 import ChatList from "./chat-list";
 import AddUsersSidePanel from "./add-users-side-bar";
 import { ChatSkeleton } from "@/components/ui/skeleton";
-import { getUsers } from "@/services/users";
 import Navbar from "./navbar";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import OpenChat from "./open-chat";
-import WelcomeChat from "./WelcomeChat";
-import { useDebounce } from "use-debounce";
+import WelcomeChat from "./welcome-chat";
+import { useUsers } from "@/hooks/use-users";
+import { useSocket } from "@/hooks/use-socket";
 
 const Chats = () => {
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const { user, isUserLoading } = useProfile();
+  const socket = useSocket();
+  // const {
+  //   messages,
+  //   setMessages,
+  //   isMessagesError,
+  //   isMessagesLoading,
+  //   sendMessage,
+  //   isSendingMessage,
+  //   isSendingMessageError,
+  // } = useMessages();
+
+  // const [newMessage, setNewMessage] = useState("");
+
+  // const sendMessage = async () => {
+  //   if (!newMessage.trim()) return;
+
+  //   const { data } = await axios.post("http://localhost:5000/api/messages", {
+  //     text: newMessage,
+  //   });
+
+  //   socket?.emit("message", data);
+  //   setNewMessage("");
+  // };
+
+  useEffect(() => {
+    if (!socket) return;
+    // Listen for new messages
+    socket.on("newMessage", (message) => {
+      console.log("New message received:", message);
+      // Update chat state here
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [socket]);
+  const {
+    users,
+    isUsersError,
+    isFetchingUsers,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    searchQuery,
+    debouncedSearchQuery,
+    handleSearch,
+  } = useUsers();
+
   const {
     chatsData,
     isFetchingChats,
@@ -26,34 +74,9 @@ const Chats = () => {
     currentChat,
     setCurrentChat,
   } = useChat();
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+
   const [searchChatsQuery, setSearchChatsQuery] = useState("");
 
-  // Debounce search input
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-
-  const {
-    data,
-    error: isUsersError,
-    isLoading: isFetchingUsers,
-    fetchNextPage,
-    hasNextPage,
-    refetch,
-  } = useInfiniteQuery({
-    queryKey: ["getUsers", debouncedSearchQuery],
-    queryFn: ({ pageParam = 1 }) =>
-      getUsers(pageParam, 10, debouncedSearchQuery),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage?.pagination?.hasNextPage
-        ? lastPage.pagination.currentPage + 1
-        : undefined,
-  });
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
   const handleSearchChats = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchChatsQuery(e.target.value);
   };
@@ -69,7 +92,7 @@ const Chats = () => {
   useEffect(() => {
     if (
       user &&
-      data &&
+      users.length > 0 &&
       !isFetchingChats &&
       !isChatsError &&
       chatsData.chats &&
@@ -77,14 +100,14 @@ const Chats = () => {
     ) {
       setIsSidePanelOpen(true);
     }
-  }, [chatsData, user, data, isFetchingChats, isChatsError]);
+  }, [chatsData, user, users, isFetchingChats, isChatsError]);
 
   return (
     <div className="flex h-screen bg-gray-100 relative">
       <AddUsersSidePanel
         isSidePanelOpen={isSidePanelOpen}
         setIsSidePanelOpen={setIsSidePanelOpen}
-        users={data?.pages.flatMap((page) => page.users)}
+        users={users}
         isFetchingUsers={isFetchingUsers}
         isUsersError={isUsersError}
         fetchNextPage={fetchNextPage}

@@ -3,6 +3,7 @@ import { getUserProfile } from "../services/users";
 import { useUserStore } from "../store/user-store";
 import { useEffect } from "react";
 import { User } from "../types/user";
+import { USER } from "@/constants/query-keys";
 
 interface ProfileResponse {
   data: User;
@@ -12,7 +13,7 @@ export const useProfile = () => {
   const setUser = useUserStore((state) => state.setUser);
 
   const { data, error, isLoading, refetch } = useQuery<ProfileResponse>({
-    queryKey: ["getUserProfile"],
+    queryKey: [USER.FETCH_PROFILE],
     queryFn: getUserProfile,
     retry: true,
   });

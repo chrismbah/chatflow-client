@@ -2,12 +2,12 @@
 "use client";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
-import { IoMdPersonAdd, IoMdAdd } from "react-icons/io";
 import { UsersSkeleton } from "@/components/ui/skeleton";
 import { useChat } from "@/hooks/use-chat";
 import Loader from "@/components/ui/loader/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { User } from "@/types/user";
+import { IoMdPersonAdd, IoMdCheckmark, IoMdAdd } from "react-icons/io";
 
 const AddUsersSidePanel = ({
   isSidePanelOpen,
@@ -19,8 +19,7 @@ const AddUsersSidePanel = ({
   hasNextPage,
   searchQuery,
   handleSearch,
-}: // isFetchingNextPage,
-{
+}: {
   isSidePanelOpen: boolean;
   setIsSidePanelOpen: (payload: boolean) => void;
   users?: User[];
@@ -30,12 +29,13 @@ const AddUsersSidePanel = ({
   hasNextPage: boolean;
   searchQuery: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // isFetchingNextPage: boolean;
 }) => {
   const { createUserChat, loadingUsers } = useChat();
+  const [addedUsers, setAddedUsers] = React.useState<Set<string>>(new Set());
 
-  const createAndAddChat = (userId: string) => {
+  const createAndAddChat = async (userId: string) => {
     createUserChat(userId);
+    setAddedUsers((prev) => new Set(prev).add(userId)); // Mark user as added
   };
 
   return (
@@ -114,7 +114,7 @@ const AddUsersSidePanel = ({
                         <div className="flex flex-col gap-1">
                           <p className="font-semibold text-gray-900">
                             {user.fullName}
-                          </p>{" "}
+                          </p>
                           <p className="font-light text-gray-400 text-[12px]">
                             {user.email}
                           </p>
@@ -124,6 +124,10 @@ const AddUsersSidePanel = ({
                         {loadingUsers.includes(user._id) ? (
                           <div className="p-2">
                             <Loader className="w-6 h-6 text-indigo-500" />
+                          </div>
+                        ) : addedUsers.has(user._id) ? (
+                          <div className="p-2">
+                            <IoMdCheckmark className="w-6 h-6 text-green-500" />
                           </div>
                         ) : (
                           <button

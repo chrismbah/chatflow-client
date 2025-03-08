@@ -3,43 +3,60 @@ import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { BsEmojiSmile } from "react-icons/bs";
-import { Chat } from "@/types/user";
+import { Chat, Message } from "@/types/user";
 import { useProfile } from "@/hooks/use-profile";
+import { useMessages } from "@/hooks/use-messages";
 import Image from "next/image";
+
 const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
   const { user, isUserLoading } = useProfile();
+  const {
+    allMessages,
+    isMessagesError,
+    isMessagesLoading,
+    sendMessage,
+    isSendingMessage,
+    message,
+    setMessage,
+  } = useMessages(currentChat._id);
 
-  if (isUserLoading) {
-    return <div>Loading...</div>;
+  // Function to send a message
+  const sendMessageContent = async () => {
+    if (!message.trim()) return; // Prevent sending empty messages
+    sendMessage(); // Send message
+    // setMessage(""); // Clear input after sending
+  };
+
+  if (isUserLoading || isMessagesLoading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">Loading...</div>
+    );
   }
 
-  if (!user) {
-    return <div>User not found.</div>;
-  }
+  if (!user) return <div className="text-center">User not found.</div>;
+  if (isMessagesError)
+    return <div className="text-center">Failed to load messages.</div>;
 
-  // Find the other user in the chat
-  const reciever = currentChat.users.find((u) => u._id !== user._id);
-
-  if (!reciever) {
-    return <div>Chat data is invalid.</div>; // Handle the case where the other user is not found
-  }
+  const receiver = currentChat.users.find((u) => u._id !== user._id);
+  if (!receiver)
+    return <div className="text-center">Chat data is invalid.</div>;
 
   return (
-    <main className="flex-1 flex flex-col">
+    <main className="flex-1 flex flex-col bg-gray-50">
       {/* Chat Header */}
-      <header className="flex items-center justify-between p-4 bg-white shadow">
+      <header className="flex items-center justify-between p-4 bg-white shadow-md">
         <div className="flex items-center space-x-4">
           <FiArrowLeft className="w-5 h-5 text-gray-500 sm:hidden" />
           <Image
-            src={reciever.avatar}
-            alt={reciever.fullName}
+            src={receiver.avatar}
+            alt={receiver.fullName}
             width={40}
             height={40}
             className="rounded-full"
-            priority // Ensures it loads fast
+            priority
           />
           <h2 className="text-lg font-semibold text-gray-900">
-            {reciever.fullName}
+            {receiver.fullName}
           </h2>
         </div>
         <div className="flex items-center space-x-4">
@@ -49,19 +66,33 @@ const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
       </header>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-        {/* Example Received Message */}
-        <div className="mb-4 flex">
-          <div className="max-w-xs p-3 bg-gray-200 rounded-lg">
-            <p className="text-sm text-gray-800">Hi! How’s it going?</p>
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {allMessages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-gray-600 font-medium">
+            <p className="text-lg ">No messages yet</p>
+            <p className="text-sm">Start typing to begin the conversation</p>
           </div>
-        </div>
-        {/* Example Sent Message */}
-        <div className="mb-4 flex justify-end">
-          <div className="max-w-xs p-3 text-white bg-indigo-500 rounded-lg">
-            <p className="text-sm">I’m good! How about you?</p>
-          </div>
-        </div>
+        ) : (
+          allMessages.map((message: Message) => {
+            const isSender = message.sender._id === user._id;
+            return (
+              <div
+                key={message._id}
+                className={`flex ${isSender ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`max-w-xs p-3 rounded-lg ${
+                    isSender
+                      ? "bg-indigo-500 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  <p className="text-sm">{message.content}</p>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Chat Input */}
@@ -70,10 +101,17 @@ const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
         <AiOutlinePaperClip className="w-6 h-6 text-gray-500 mx-2" />
         <input
           type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessageContent()} // Send on Enter
           placeholder="Type a message..."
           className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        <button className="p-2 ml-4 flex items-center justify-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-400">
+        <button
+          onClick={sendMessageContent}
+          disabled={isSendingMessage}
+          className="p-2 ml-4 flex items-center justify-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-400 disabled:bg-indigo-300"
+        >
           <IoPaperPlaneOutline className="w-5 h-5" />
         </button>
       </div>

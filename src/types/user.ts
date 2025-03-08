@@ -12,3 +12,16 @@ export interface Chat {
   isGroupChat: false;
   users: User[];
 }
+
+export interface Message {
+  _id: string;
+  sender: {
+    _id: string;
+    fullName: string;
+    avatar: string;
+  };
+  content: string;
+  chat: string;
+  read: boolean;
+  createdAt: string; // ISO date string
+}

@@ -7,5 +7,6 @@ export const fetchAllChats = async () => {
 
 export const createOrAccessChat = async (userId: string) => {
   const res = await axiosInstance.post("/chat", { userId });
+  console.log("Accessing chat..");
   return res.data.data;
 };
