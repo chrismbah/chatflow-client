@@ -20,6 +20,7 @@ const ChatList = ({
 }) => {
   const { user } = useProfile();
   const queryClient = useQueryClient();
+
   const accessUserChat = (userId: string) => {
     const cachedChat = queryClient.getQueryData(["chat", userId]);
     if (cachedChat) {
@@ -29,6 +30,7 @@ const ChatList = ({
       accessChat(userId);
     }
   };
+
   // Filter chats based on searchChatsQuery
   const filteredChats = chats?.filter(
     (chat) =>
@@ -73,7 +75,7 @@ const ChatList = ({
                         {member.fullName}
                       </p>
                       <p className="text-[12px] truncate italic text-gray-400 font-normal">
-                        Tap to start a new chat.
+                        {chat.latestMessage?.content ?? "Tap to add new chat"}
                       </p>
                     </div>
                   </div>

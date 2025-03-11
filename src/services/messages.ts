@@ -12,6 +12,5 @@ export const fetchMessages = async (chatId: string) => {
   const res = await axiosInstance.get(`/message`, {
     params: { chatId },
   });
-  console.log(res.data.data);
   return res.data.data;
 };

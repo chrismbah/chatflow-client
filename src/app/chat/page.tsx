@@ -11,47 +11,11 @@ import Navbar from "./navbar";
 import OpenChat from "./open-chat";
 import WelcomeChat from "./welcome-chat";
 import { useUsers } from "@/hooks/use-users";
-import { useSocket } from "@/hooks/use-socket";
 
 const Chats = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const { user, isUserLoading } = useProfile();
-  const socket = useSocket();
-  // const {
-  //   messages,
-  //   setMessages,
-  //   isMessagesError,
-  //   isMessagesLoading,
-  //   sendMessage,
-  //   isSendingMessage,
-  //   isSendingMessageError,
-  // } = useMessages();
 
-  // const [newMessage, setNewMessage] = useState("");
-
-  // const sendMessage = async () => {
-  //   if (!newMessage.trim()) return;
-
-  //   const { data } = await axios.post("http://localhost:5000/api/messages", {
-  //     text: newMessage,
-  //   });
-
-  //   socket?.emit("message", data);
-  //   setNewMessage("");
-  // };
-
-  useEffect(() => {
-    if (!socket) return;
-    // Listen for new messages
-    socket.on("newMessage", (message) => {
-      console.log("New message received:", message);
-      // Update chat state here
-    });
-
-    return () => {
-      socket.off("newMessage");
-    };
-  }, [socket]);
   const {
     users,
     isUsersError,
@@ -167,7 +131,7 @@ const Chats = () => {
           </div>
         </aside>
         {currentChat ? (
-          <OpenChat key={currentChat._id} currentChat={currentChat} />
+          <OpenChat currentChat={currentChat} />
         ) : isAccessingChat ? (
           <div>Accessing Chat</div>
         ) : isAccessingChatError ? (

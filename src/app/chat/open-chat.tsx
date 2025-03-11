@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { IoPaperPlaneOutline } from "react-icons/io5";
@@ -7,24 +8,32 @@ import { Chat, Message } from "@/types/user";
 import { useProfile } from "@/hooks/use-profile";
 import { useMessages } from "@/hooks/use-messages";
 import Image from "next/image";
+import TypingIndicator from "@/components/ui/TypingIndicator"; // Import the new component
 
 const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
   const { user, isUserLoading } = useProfile();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const {
     allMessages,
     isMessagesError,
     isMessagesLoading,
     sendMessage,
-    isSendingMessage,
     message,
     setMessage,
+    isTyping,
+    // typingUsers,
   } = useMessages(currentChat._id);
 
-  // Function to send a message
-  const sendMessageContent = async () => {
-    if (!message.trim()) return; // Prevent sending empty messages
-    sendMessage(); // Send message
-    // setMessage(""); // Clear input after sending
+  // Auto-scroll to bottom when messages change or when typing starts/stops
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [allMessages, isTyping]);
+
+  // Function to handle message sending
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    sendMessage();
   };
 
   if (isUserLoading || isMessagesLoading) {
@@ -73,25 +82,37 @@ const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
             <p className="text-sm">Start typing to begin the conversation</p>
           </div>
         ) : (
-          allMessages.map((message: Message) => {
-            const isSender = message.sender._id === user._id;
-            return (
-              <div
-                key={message._id}
-                className={`flex ${isSender ? "justify-end" : "justify-start"}`}
-              >
+          <>
+            {allMessages.map((message: Message) => {
+              const isSender = message.sender._id === user._id;
+              return (
                 <div
-                  className={`max-w-xs p-3 rounded-lg ${
-                    isSender
-                      ? "bg-indigo-500 text-white"
-                      : "bg-gray-200 text-gray-800"
+                  key={message._id}
+                  className={`flex ${
+                    isSender ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <p className="text-sm">{message.content}</p>
+                  <div
+                    className={`max-w-xs p-3 rounded-lg ${
+                      isSender
+                        ? "bg-indigo-500 text-white"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                  </div>
+                </div>
+              );
+            })}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div>
+                  <TypingIndicator />
                 </div>
               </div>
-            );
-          })
+            )}
+            <div ref={messagesEndRef} /> {/* Auto-scroll anchor */}
+          </>
         )}
       </div>
 
@@ -103,13 +124,12 @@ const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessageContent()} // Send on Enter
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} // Send on Enter
           placeholder="Type a message..."
           className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
-          onClick={sendMessageContent}
-          disabled={isSendingMessage}
+          onClick={handleSendMessage}
           className="p-2 ml-4 flex items-center justify-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-400 disabled:bg-indigo-300"
         >
           <IoPaperPlaneOutline className="w-5 h-5" />

@@ -11,6 +11,9 @@ export interface Chat {
   chatName: string;
   isGroupChat: false;
   users: User[];
+  latestMessage: {
+    content: string;
+  };
 }
 
 export interface Message {
