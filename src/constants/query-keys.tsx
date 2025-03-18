@@ -4,6 +4,7 @@ export const CHATS = {
 };
 export const MESSAGES = {
   FETCH_MESSAGES: "FETCH_MESSAGES",
+  READ_MESSAGES: "READ_MESSAGES",
 };
 
 export const USERS = {

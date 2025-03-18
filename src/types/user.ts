@@ -13,6 +13,7 @@ export interface Chat {
   users: User[];
   latestMessage: {
     content: string;
+    createdAt: string;
   };
 }
 
@@ -25,6 +26,7 @@ export interface Message {
   };
   content: string;
   chat: string;
-  read: boolean;
-  createdAt: string; // ISO date string
+  readBy: string[];
+  status: "pending" | "sent" | "received";
+  createdAt: string;
 }

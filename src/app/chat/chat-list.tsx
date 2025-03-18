@@ -4,6 +4,7 @@ import { useProfile } from "@/hooks/use-profile";
 import Image from "next/image";
 import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import { Chat } from "@/types/user";
+import moment from "moment";
 
 const ChatList = ({
   chats,
@@ -80,7 +81,10 @@ const ChatList = ({
                     </div>
                   </div>
                   <div className="absolute top-0 right-0 z-2 text-right p-4 flex flex-col items-end">
-                    <p className="text-xs text-gray-400">12:{30 + i} PM</p>
+                    <p className="text-xs text-gray-400">
+                      {moment(chat.latestMessage?.createdAt).format("h:mm A") ??
+                        ""}
+                    </p>
                     <span className="w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold text-white bg-indigo-500">
                       {i + 1}
                     </span>

@@ -14,3 +14,8 @@ export const fetchMessages = async (chatId: string) => {
   });
   return res.data.data;
 };
+
+export const readMessages = async (data: { chatId: string }) => {
+  const res = await axiosInstance.patch(`/message/read`, data);
+  return res.data.data;
+};
