@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createOrAccessChat, fetchAllChats } from "@/services/chat";
+import { createChat, fetchAllChats } from "@/services/chat";
 import toast from "react-hot-toast";
 import { responseHandler } from "@/utils/responseHandler";
 import { Chat } from "@/types";
@@ -25,7 +25,7 @@ export const useChat = () => {
     isPending: isCreatingChat,
     isError: isCreatingChatError,
   } = useMutation({
-    mutationFn: createOrAccessChat,
+    mutationFn: createChat,
     onMutate: (userId: string) => {
       // Add user ID to loading list
       setLoadingUsers((prev) => [...prev, userId]);
@@ -53,21 +53,6 @@ export const useChat = () => {
     },
   });
 
-  const {
-    mutate: accessChat,
-    isPending: isAccessingChat,
-    isError: isAccessingChatError,
-  } = useMutation({
-    mutationFn: createOrAccessChat,
-    onSuccess: (data, userId) => {
-      queryClient.setQueryData([CHATS.CURRENT_CHAT, userId], data);
-      setCurrentChat(data);
-    },
-    onError: (error) => {
-      console.error("Error creating chat", error);
-      toast.error(responseHandler(error));
-    },
-  });
 
   return {
     chatsData,
@@ -78,9 +63,6 @@ export const useChat = () => {
     isCreatingChat,
     isCreatingChatError,
     loadingUsers,
-    accessChat,
-    isAccessingChat,
-    isAccessingChatError,
     currentChat,
     setCurrentChat,
   };

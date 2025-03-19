@@ -13,21 +13,13 @@ import { useProfile } from "@/hooks/use-profile";
 import { useMessages } from "@/hooks/use-messages";
 import TypingIndicator from "@/components/ui/TypingIndicator";
 import moment from "moment";
-import { OpenChatHeader, OpenChatHeaderSkeleton } from "./open-chat-header";
+import { OpenChatHeader } from "./open-chat-header";
 import Image from "next/image";
 import EmojiPicker from "emoji-picker-react";
 import { MessagesSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 // import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 // import { getInitials } from "./header";
-const OpenChat = ({
-  currentChat,
-  isAccessingChat,
-  isAccessingChatError,
-}: {
-  currentChat: Chat | null;
-  isAccessingChat: boolean;
-  isAccessingChatError: boolean;
-}) => {
+const OpenChat = ({ currentChat }: { currentChat: Chat }) => {
   // Ensure chatId is always a string, never undefined
   const chatId = currentChat?._id ?? "";
   const { user } = useProfile();
@@ -52,16 +44,10 @@ const OpenChat = ({
   }, [currentChat, user]);
 
   useEffect(() => {
-    if (!isMessagesLoading && !isAccessingChat) {
+    if (!isMessagesLoading) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [
-    allMessages,
-    isAccessingChat,
-    isMessagesLoading,
-    isTyping,
-    messagesEndRef,
-  ]);
+  }, [allMessages, isMessagesLoading, isTyping, messagesEndRef]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,8 +78,6 @@ const OpenChat = ({
   // if (!user) return <div className="text-center">User not found.</div>;
   if (isMessagesError)
     return <div className="text-center">Failed to load messages.</div>;
-  if (isAccessingChatError)
-    return <div className="text-center">Failed to access chat.</div>;
 
   // Handle message status display in a cleaner way
   const getMessageStatusIcon = (message: Message, receiverId?: string) => {
@@ -112,16 +96,10 @@ const OpenChat = ({
 
   return (
     <main className="flex-1 flex flex-col">
-      {isAccessingChat || !receiver ? (
-        <OpenChatHeaderSkeleton />
-      ) : (
-        <OpenChatHeader receiver={receiver} />
-      )}
+      {receiver && <OpenChatHeader receiver={receiver} />}
       <div className="flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar p-4 space-y-3">
-        {receiver && !isMessagesLoading && !isAccessingChat && (
-          <ChatBadge receiver={receiver} />
-        )}
-        {isMessagesLoading || isAccessingChat ? (
+        {receiver && !isMessagesLoading && <ChatBadge receiver={receiver} />}
+        {isMessagesLoading ? (
           <MessagesSkeleton count={10} />
         ) : (
           allMessages.map((message: Message) => {

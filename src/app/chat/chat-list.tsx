@@ -2,36 +2,21 @@
 import React from "react";
 import { useProfile } from "@/hooks/use-profile";
 import Image from "next/image";
-import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import { Chat } from "@/types";
 import moment from "moment";
-import { CHATS } from "@/constants/query-keys";
 
 const ChatList = ({
   chats,
-  accessChat,
   setCurrentChat,
   currentChat,
   searchChatsQuery,
 }: {
   chats: Chat[];
-  accessChat: UseMutateFunction<any, Error, string, unknown>;
   setCurrentChat: (payload: any) => void;
   currentChat: Chat | null;
   searchChatsQuery: string;
 }) => {
   const { user } = useProfile();
-  const queryClient = useQueryClient();
-
-  const accessUserChat = (userId: string) => {
-    const cachedChat = queryClient.getQueryData([CHATS.CURRENT_CHAT, userId]);
-    if (cachedChat) {
-      setCurrentChat(cachedChat);
-      console.log("Using cached chat:", cachedChat);
-    } else {
-      accessChat(userId);
-    }
-  };
 
   // Filter chats based on searchChatsQuery
   const filteredChats = chats?.filter(
@@ -57,7 +42,7 @@ const ChatList = ({
               return (
                 <div
                   key={`${chat._id}-${member._id}`}
-                  onClick={() => accessUserChat(member._id)}
+                  onClick={() => setCurrentChat(chat)}
                   className={`mb-2 flex items-center justify-between p-4 rounded-lg transition duration-200 cursor-pointer relative 
                     ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}`}
                 >

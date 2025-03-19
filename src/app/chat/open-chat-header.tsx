@@ -2,7 +2,6 @@ import { User } from "@/types";
 import React from "react";
 import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import Image from "next/image";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface OpenChatHeaderProps {
   receiver: User;
@@ -40,14 +39,14 @@ export const OpenChatHeader = ({ receiver }: OpenChatHeaderProps) => {
 };
 
 
-export const OpenChatHeaderSkeleton = () => {
-  return (
-    <div className="p-4 flex items-center gap-3 border-b">
-      <Skeleton className="w-[55px] h-[55px] rounded-full" />
-      <div className="flex flex-col gap-1">
-        <Skeleton className="w-[200px] h-6 rounded-md" />
-        <Skeleton className="w-20 h-3 rounded-md" />
-      </div>
-    </div>
-  );
-};
+// export const OpenChatHeaderSkeleton = () => {
+//   return (
+//     <div className="p-4 flex items-center gap-3 border-b">
+//       <Skeleton className="w-[55px] h-[55px] rounded-full" />
+//       <div className="flex flex-col gap-1">
+//         <Skeleton className="w-[200px] h-6 rounded-md" />
+//         <Skeleton className="w-20 h-3 rounded-md" />
+//       </div>
+//     </div>
+//   );
+// };

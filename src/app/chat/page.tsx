@@ -32,9 +32,6 @@ const Chats = () => {
     chatsData,
     isFetchingChats,
     isChatsError,
-    accessChat,
-    isAccessingChat,
-    isAccessingChatError,
     currentChat,
     setCurrentChat,
   } = useChat();
@@ -92,7 +89,6 @@ const Chats = () => {
           />
           <div className="h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
             <Tabs defaultValue="active" className="w-full">
-              {/* Tabs List */}
               <TabsList className="grid grid-cols-3 w-full border-0 bg-transparent">
                 <TabsTrigger
                   value="active"
@@ -124,7 +120,6 @@ const Chats = () => {
                   ) : (
                     <ChatList
                       chats={chatsData.chats}
-                      accessChat={accessChat}
                       currentChat={currentChat}
                       setCurrentChat={setCurrentChat}
                       searchChatsQuery={searchChatsQuery}
@@ -135,7 +130,6 @@ const Chats = () => {
                 <TabsContent value="favorites">
                   <ChatList
                     chats={chatsData.chats}
-                    accessChat={accessChat}
                     currentChat={currentChat}
                     setCurrentChat={setCurrentChat}
                     searchChatsQuery={searchChatsQuery}
@@ -145,7 +139,6 @@ const Chats = () => {
                 <TabsContent value="all">
                   <ChatList
                     chats={chatsData.chats}
-                    accessChat={accessChat}
                     currentChat={currentChat}
                     setCurrentChat={setCurrentChat}
                     searchChatsQuery={searchChatsQuery}
@@ -156,12 +149,8 @@ const Chats = () => {
           </div>
         </aside>
 
-        {currentChat ||  isAccessingChat ||  isAccessingChatError ? (
-          <OpenChat
-            currentChat={currentChat}
-            isAccessingChat={isAccessingChat}
-            isAccessingChatError={isAccessingChatError}
-          />
+        {currentChat ? (
+          <OpenChat currentChat={currentChat} />
         ) : (
           <WelcomeChat
             isUserLoading={isUserLoading}

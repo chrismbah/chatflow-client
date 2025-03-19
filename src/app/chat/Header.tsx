@@ -6,7 +6,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface HeaderProps {
-  user?: User;
+  user: User | null;
 }
 export const getInitials = (name: string) => {
   const nameParts = name.split(" ");
@@ -18,19 +18,16 @@ export const getInitials = (name: string) => {
 
 // Function to truncate username if it exceeds a certain length
 export const truncateName = (name: string, maxLength = 15) => {
-  return name.length > maxLength
-    ? name.substring(0, maxLength) + "..."
-    : name;
+  return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
 };
 
 export const Header = ({ user }: HeaderProps) => {
-  
   return (
     <header className="flex items-center justify-between">
       {user ? (
         <div className="flex gap-4 items-center">
           <div className="relative w-10 h-10">
-            <Avatar >
+            <Avatar>
               <Image
                 src={user.avatar}
                 alt="User"
