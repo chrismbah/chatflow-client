@@ -42,6 +42,7 @@ export const useMessages = (chatId: string) => {
     useMutation({
       mutationFn: createMessage,
       onMutate: async (newMessageData) => {
+        setMessage("");
         if (user) {
           const tempMessage: Message = {
             _id: crypto.randomUUID(), // Temporary ID to avoid duplicate keys
@@ -75,7 +76,6 @@ export const useMessages = (chatId: string) => {
         if (!socket) return console.log("Socket is null");
         // Emit the new message
         socket.emit("new_message", { ...newMessage, chat: chatId });
-        setMessage("");
       },
 
       onError: (error: IError, _, tempMessage) => {

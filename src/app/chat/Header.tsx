@@ -8,29 +8,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface HeaderProps {
   user?: User;
 }
+export const getInitials = (name: string) => {
+  const nameParts = name.split(" ");
+  if (nameParts.length >= 2) {
+    return `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase(); // First letters of first and last name
+  }
+  return nameParts[0][0].toUpperCase(); // If only one name, return first letter
+};
+
+// Function to truncate username if it exceeds a certain length
+export const truncateName = (name: string, maxLength = 15) => {
+  return name.length > maxLength
+    ? name.substring(0, maxLength) + "..."
+    : name;
+};
 
 export const Header = ({ user }: HeaderProps) => {
-  const getInitials = (name: string) => {
-    const nameParts = name.split(" ");
-    if (nameParts.length >= 2) {
-      return `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase(); // First letters of first and last name
-    }
-    return nameParts[0][0].toUpperCase(); // If only one name, return first letter
-  };
-
-  // Function to truncate username if it exceeds a certain length
-  const truncateName = (name: string, maxLength = 15) => {
-    return name.length > maxLength
-      ? name.substring(0, maxLength) + "..."
-      : name;
-  };
-
+  
   return (
     <header className="flex items-center justify-between">
       {user ? (
         <div className="flex gap-4 items-center">
           <div className="relative w-10 h-10">
-            <Avatar className="">
+            <Avatar >
               <Image
                 src={user.avatar}
                 alt="User"

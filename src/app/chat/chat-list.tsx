@@ -58,8 +58,8 @@ const ChatList = ({
                 <div
                   key={`${chat._id}-${member._id}`}
                   onClick={() => accessUserChat(member._id)}
-                  className={`mb-2 flex items-center justify-between p-4 bg-transparent rounded-lg transition duration-200 cursor-pointer relative 
-                    ${isSelected ? "bg-red-500" : "hover:bg-gray-100/20"}`}
+                  className={`mb-2 flex items-center justify-between p-4 rounded-lg transition duration-200 cursor-pointer relative 
+                    ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}`}
                 >
                   <div className="flex items-center space-x-4">
                     <Image

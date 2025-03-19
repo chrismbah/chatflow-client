@@ -17,7 +17,8 @@ import { OpenChatHeader, OpenChatHeaderSkeleton } from "./open-chat-header";
 import Image from "next/image";
 import EmojiPicker from "emoji-picker-react";
 import { MessagesSkeleton } from "@/components/ui/skeleton/chat-skeleton";
-
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import { getInitials } from "./header";
 const OpenChat = ({
   currentChat,
   isAccessingChat,
@@ -51,10 +52,16 @@ const OpenChat = ({
   }, [currentChat, user]);
 
   useEffect(() => {
-    if (!isMessagesLoading) {
+    if (!isMessagesLoading && !isAccessingChat) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [allMessages, isMessagesLoading, isTyping, messagesEndRef]);
+  }, [
+    allMessages,
+    isAccessingChat,
+    isMessagesLoading,
+    isTyping,
+    messagesEndRef,
+  ]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -101,6 +108,8 @@ const OpenChat = ({
     }
   };
 
+  console.log("All Messages:", allMessages);
+
   return (
     <main className="flex-1 flex flex-col">
       {isAccessingChat || !receiver ? (
@@ -109,8 +118,10 @@ const OpenChat = ({
         <OpenChatHeader receiver={receiver} />
       )}
       <div className="flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar p-4 space-y-3">
-        {receiver && <ChatBadge receiver={receiver} />}
-        {isMessagesLoading ? (
+        {receiver && !isMessagesLoading && !isAccessingChat && (
+          <ChatBadge receiver={receiver} />
+        )}
+        {isMessagesLoading || isAccessingChat ? (
           <MessagesSkeleton count={10} />
         ) : (
           allMessages.map((message: Message) => {
@@ -127,15 +138,14 @@ const OpenChat = ({
                     isSender ? "flex-row-reverse" : "flex-row"
                   } gap-2`}
                 >
-                  <div className="w-8 h-8 relative rounded-full overflow-hidden">
-                    <Image
-                      src={message.sender.avatar}
-                      alt={message.sender.fullName}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-full"
-                    />
-                  </div>
+                  <Image
+                    src={message.sender.avatar}
+                    alt={message.sender.fullName}
+                    width={35}
+                    height={35}
+                    className="rounded-full"
+                  />
+
                   <div
                     className={`flex flex-col gap-1 ${
                       isSender ? "items-end" : "items-start"
@@ -188,7 +198,7 @@ const OpenChat = ({
               ref={emojiPickerRef}
               className="absolute bottom-full left-0 mb-2 z-10"
             >
-              <EmojiPicker theme={"dark"} onEmojiClick={handleEmojiClick} />
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
             </div>
           )}
           <textarea

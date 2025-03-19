@@ -95,7 +95,7 @@ export const MessagesSkeleton = ({ count }: { count: number }) => {
                 }`}
               >
                 <Skeleton
-                  className={`relative max-w-[75%] h-[32px] p-2 rounded-t-lg bg-[#2c2b31] ${
+                  className={`relative max-w-[75%] h-[32px] p-2 rounded-none rounded-t-lg bg-[#2c2b31] ${
                     isSender ? "rounded-bl-lg w-44" : "rounded-br-lg w-48"
                   }`}
                 />

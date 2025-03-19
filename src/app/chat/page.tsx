@@ -8,7 +8,7 @@ import { ChatSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import OpenChat from "./open-chat";
 import WelcomeChat from "./welcome-chat";
 import { useUsers } from "@/hooks/use-users";
-import { Header } from "./Header";
+import { Header } from "./header";
 import ChatSearchBar from "./chat-search-bar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -156,20 +156,12 @@ const Chats = () => {
           </div>
         </aside>
 
-        {currentChat ? (
+        {currentChat ||  isAccessingChat ||  isAccessingChatError ? (
           <OpenChat
             currentChat={currentChat}
             isAccessingChat={isAccessingChat}
             isAccessingChatError={isAccessingChatError}
           />
-        ) : isAccessingChat ? (
-          <div className="flex-1 flex items-center justify-center">
-            <p>Loading chat...</p>
-          </div>
-        ) : isAccessingChatError ? (
-          <div className="flex-1 flex items-center justify-center">
-            <p>Error accessing chat. Please try again.</p>
-          </div>
         ) : (
           <WelcomeChat
             isUserLoading={isUserLoading}
