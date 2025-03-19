@@ -5,6 +5,7 @@ import Image from "next/image";
 import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import { Chat } from "@/types";
 import moment from "moment";
+import { CHATS } from "@/constants/query-keys";
 
 const ChatList = ({
   chats,
@@ -23,7 +24,7 @@ const ChatList = ({
   const queryClient = useQueryClient();
 
   const accessUserChat = (userId: string) => {
-    const cachedChat = queryClient.getQueryData(["chat", userId]);
+    const cachedChat = queryClient.getQueryData([CHATS.CURRENT_CHAT, userId]);
     if (cachedChat) {
       setCurrentChat(cachedChat);
       console.log("Using cached chat:", cachedChat);
@@ -52,13 +53,13 @@ const ChatList = ({
           chat.users
             ?.filter((member) => member._id !== user?._id)
             .map((member, i) => {
-              const isSelected = currentChat?._id === chat._id;
+              const isSelected = currentChat && currentChat._id === chat._id;
               return (
                 <div
-                  key={member._id}
+                  key={`${chat._id}-${member._id}`}
                   onClick={() => accessUserChat(member._id)}
                   className={`mb-2 flex items-center justify-between p-4 bg-transparent rounded-lg transition duration-200 cursor-pointer relative 
-                    ${isSelected ? "bg-gray-100/20" : "hover:bg-gray-100/20"}`}
+                    ${isSelected ? "bg-red-500" : "hover:bg-gray-100/20"}`}
                 >
                   <div className="flex items-center space-x-4">
                     <Image
@@ -75,7 +76,7 @@ const ChatList = ({
                       >
                         {member.fullName}
                       </p>
-                      <p className="text-[12px] truncate italic text-gray-400 font-normal">
+                      <p className="text-[12px] truncate text-gray-400 font-normal">
                         {chat.latestMessage?.content ?? "Tap to add new chat"}
                       </p>
                     </div>

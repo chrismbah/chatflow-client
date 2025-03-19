@@ -8,8 +8,8 @@ import { ChatSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import OpenChat from "./open-chat";
 import WelcomeChat from "./welcome-chat";
 import { useUsers } from "@/hooks/use-users";
-import { Header, HeaderSkeleton } from "./Header";
-import ChatSearchBar from "./ChatSearchBar";
+import { Header } from "./Header";
+import ChatSearchBar from "./chat-search-bar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const Chats = () => {
@@ -90,7 +90,7 @@ const Chats = () => {
             handleSearchChats={handleSearchChats}
             toggleSidePanel={toggleSidePanel}
           />
-          <div className="h-[calc(100vh-180px)] overflow-y-auto">
+          <div className="h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
             <Tabs defaultValue="active" className="w-full">
               {/* Tabs List */}
               <TabsList className="grid grid-cols-3 w-full border-0 bg-transparent">
@@ -118,7 +118,7 @@ const Chats = () => {
               <div className="overflow-y-auto h-full hide-scrollbar">
                 <TabsContent value="active">
                   {isFetchingChats ? (
-                    <ChatSkeleton count={7} />
+                    <ChatSkeleton count={10} />
                   ) : isChatsError ? (
                     <ErrorMessage message="Error loading chats." />
                   ) : (
@@ -155,14 +155,21 @@ const Chats = () => {
             </Tabs>
           </div>
         </aside>
+
         {currentChat ? (
-          // <div className="h-screen overflow-y-auto">
-          <OpenChat currentChat={currentChat} />
-        ) : // </div>
-        isAccessingChat ? (
-          <div>Accessing Chat</div>
+          <OpenChat
+            currentChat={currentChat}
+            isAccessingChat={isAccessingChat}
+            isAccessingChatError={isAccessingChatError}
+          />
+        ) : isAccessingChat ? (
+          <div className="flex-1 flex items-center justify-center">
+            <p>Loading chat...</p>
+          </div>
         ) : isAccessingChatError ? (
-          <div>Couldn&apos;t access chat</div>
+          <div className="flex-1 flex items-center justify-center">
+            <p>Error accessing chat. Please try again.</p>
+          </div>
         ) : (
           <WelcomeChat
             isUserLoading={isUserLoading}
@@ -177,7 +184,5 @@ export default Chats;
 
 // Generic Error Component
 const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="px-4 text-center text-sm font-medium text-gray-700">
-    {message}
-  </div>
+  <div className="px-4 text-center text-sm font-medium ">{message}</div>
 );

@@ -1,5 +1,6 @@
 import React from "react";
 import { IoMdPersonAdd } from "react-icons/io"; // Assuming you want the same icon for the button
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ChatSkeletonProps {
   count: number; // Number of skeletons to display
@@ -27,29 +28,17 @@ export const AvatarSkeleton = ({ className }: { className?: string }) => {
 
 export const ChatSkeleton = ({ count }: ChatSkeletonProps) => {
   const skeletons = Array.from({ length: count }, (_, index) => (
-    <li
-      key={index}
-      className="flex items-center justify-between p-4 hover:bg-gray-100 cursor-pointer animate-pulse"
-    >
+    <li key={index} className="flex items-center justify-between py-4">
       <div className="flex items-center space-x-4">
-        {/* Avatar Skeleton */}
-        <AvatarSkeleton className="rounded-full" />
-
+        <Skeleton className="h-[35px] w-[35px] rounded-full" />
         <div className="flex-1 space-y-2">
-          {/* Name Skeleton */}
-          <div className="h-4 bg-gray-300 rounded w-32"></div>
-
-          {/* Message Skeleton */}
-          <div className="h-3 bg-gray-300 rounded w-48"></div>
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-48" />
         </div>
       </div>
-
       <div className="text-right space-y-2">
-        {/* Time Skeleton */}
-        <div className="h-2 bg-gray-300 rounded w-12"></div>
-
-        {/* Badge Skeleton */}
-        <div className="h-6 w-6 bg-gray-300 rounded-full"></div>
+        <Skeleton className="h-2 w-13" />
+        <Skeleton className="h-6 w-6 rounded-full" />
       </div>
     </li>
   ));
@@ -64,20 +53,13 @@ export const UsersSkeleton = ({ count }: UsersSkeletonProps) => {
       className="flex items-center justify-between py-4 cursor-pointer animate-pulse"
     >
       <div className="flex items-center space-x-4">
-        {/* Avatar Skeleton */}
         <AvatarSkeleton className="rounded-full" />
-
         <div className="flex flex-col gap-1">
-          {/* Name Skeleton */}
           <div className="h-4 bg-gray-300 rounded w-32"></div>
-
-          {/* Email Skeleton */}
           <div className="h-3 bg-gray-300 rounded w-48"></div>
         </div>
       </div>
-
       <div className="text-right">
-        {/* Button Skeleton */}
         <div className="w-10 h-10 rounded-full flex items-center justify-center">
           <IoMdPersonAdd className="w-[26px] h-[26px] text-gray-300" />
         </div>
@@ -86,4 +68,43 @@ export const UsersSkeleton = ({ count }: UsersSkeletonProps) => {
   ));
 
   return <ul>{skeletons}</ul>;
+};
+
+export const MessagesSkeleton = ({ count }: { count: number }) => {
+  return (
+    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      {[...Array(count)].map((_, i) => {
+        const isSender = i % 2 === 0;
+
+        return (
+          <div
+            key={i}
+            className={`flex ${
+              isSender ? "justify-end" : "justify-start"
+            } mb-2`}
+          >
+            <div
+              className={`flex items-end ${
+                isSender ? "flex-row-reverse" : "flex-row"
+              } gap-2`}
+            >
+              {<Skeleton className="w-8 h-8 rounded-full" />}
+              <div
+                className={`flex flex-col gap-1 ${
+                  isSender ? "items-end" : "items-start"
+                }`}
+              >
+                <Skeleton
+                  className={`relative max-w-[75%] h-[32px] p-2 rounded-t-lg bg-[#2c2b31] ${
+                    isSender ? "rounded-bl-lg w-44" : "rounded-br-lg w-48"
+                  }`}
+                />
+                <Skeleton className="w-8 h-2 mt-1 rounded-sm" />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
