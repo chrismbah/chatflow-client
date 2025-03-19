@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "../services/users";
 import { useUserStore } from "../store/user-store";
 import { useEffect } from "react";
-import { User } from "../types/user";
+import { User } from "../types";
 import { USER } from "@/constants/query-keys";
 
 interface ProfileResponse {

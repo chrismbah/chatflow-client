@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { MESSAGES } from "@/constants/query-keys";
-import {
-  fetchMessages,
-  createMessage,
-  readMessages,
-} from "@/services/messages";
+import { fetchMessages, createMessage } from "@/services/messages";
 import toast from "react-hot-toast";
 import { useSocket } from "./use-socket";
-import { Message } from "@/types/user";
+import { Message } from "@/types";
 import { useProfile } from "./use-profile";
 import { errorHandler, IError } from "@/utils/responseHandler";
 
@@ -90,15 +86,7 @@ export const useMessages = (chatId: string) => {
         toast.error(errorHandler(error));
       },
     });
-  const { mutate: readMessageMutation } = useMutation({
-    mutationFn: readMessages,
-    onSuccess: () => {
-      toast.success("All Messages have been read");
-    },
-    onError: (error: IError) => {
-      toast.error(errorHandler(error));
-    },
-  });
+
   useEffect(() => {
     if (!socket || !chatId || !user) return;
     // Use Intersection Observer to detect when messages are visible
@@ -108,14 +96,9 @@ export const useMessages = (chatId: string) => {
         if (entries.some((entry) => entry.isIntersecting)) {
           // Mark messages as read
           socket.emit("read_messages", { chatId, userId: user._id });
-          toast.error("Entries works");
-
-          //! readMessageMutation({ chatId });
-        } else {
-          toast.error("Something went wrong with entries");
         }
       },
-      { threshold: 0.5 } // 50% visible
+      { threshold: 0.5 }
     );
 
     // Get message elements

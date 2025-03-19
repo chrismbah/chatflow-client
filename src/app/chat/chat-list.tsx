@@ -3,7 +3,7 @@ import React from "react";
 import { useProfile } from "@/hooks/use-profile";
 import Image from "next/image";
 import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
-import { Chat } from "@/types/user";
+import { Chat } from "@/types";
 import moment from "moment";
 
 const ChatList = ({
@@ -46,7 +46,7 @@ const ChatList = ({
   );
 
   return (
-    <div>
+    <div className="py-2">
       {filteredChats.length > 0 ? (
         filteredChats.map((chat) =>
           chat.users
@@ -57,8 +57,8 @@ const ChatList = ({
                 <div
                   key={member._id}
                   onClick={() => accessUserChat(member._id)}
-                  className={`flex items-center justify-between p-4 transition duration-100 cursor-pointer relative 
-                    ${isSelected ? "bg-gray-100" : "hover:bg-gray-100/40"}`}
+                  className={`mb-2 flex items-center justify-between p-4 bg-transparent rounded-lg transition duration-200 cursor-pointer relative 
+                    ${isSelected ? "bg-gray-100/20" : "hover:bg-gray-100/20"}`}
                 >
                   <div className="flex items-center space-x-4">
                     <Image
@@ -70,7 +70,7 @@ const ChatList = ({
                     />
                     <div className="flex flex-col w-[65%]">
                       <p
-                        className="font-semibold text-gray-900 truncate"
+                        className="font-semibold truncate"
                         title={member.fullName}
                       >
                         {member.fullName}

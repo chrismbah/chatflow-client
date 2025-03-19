@@ -4,7 +4,7 @@ import { IError, errorHandler } from "../utils/responseHandler";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUserStore } from "../store/user-store";
-import { User } from "../types/user";
+import { User } from "../types";
 import { useEffect } from "react";
 
 interface LoginResponse {

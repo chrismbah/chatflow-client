@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createOrAccessChat, fetchAllChats } from "@/services/chat";
 import toast from "react-hot-toast";
 import { responseHandler } from "@/utils/responseHandler";
-import { Chat } from "@/types/user";
+import { Chat } from "@/types";
 import { CHATS, USERS } from "@/constants/query-keys";
 export const useChat = () => {
   const [loadingUsers, setLoadingUsers] = useState<string[]>([]);

@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FiSearch } from "react-icons/fi";
-import { IoMdPersonAdd } from "react-icons/io";
 import { useProfile } from "@/hooks/use-profile";
 import { useChat } from "@/hooks/use-chat";
 import ChatList from "./chat-list";
 import AddUsersSidePanel from "./add-users-side-bar";
-import { ChatSkeleton } from "@/components/ui/skeleton";
-import Navbar from "./navbar";
+import { ChatSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import OpenChat from "./open-chat";
 import WelcomeChat from "./welcome-chat";
 import { useUsers } from "@/hooks/use-users";
+import { Header, HeaderSkeleton } from "./Header";
+import ChatSearchBar from "./ChatSearchBar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const Chats = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
@@ -67,7 +67,7 @@ const Chats = () => {
   }, [chatsData, user, users, isFetchingChats, isChatsError]);
 
   return (
-    <div className="flex h-screen bg-gray-100 relative">
+    <div className="flex h-screen relative bg-[#1b1a1f]">
       <AddUsersSidePanel
         isSidePanelOpen={isSidePanelOpen}
         setIsSidePanelOpen={setIsSidePanelOpen}
@@ -79,60 +79,87 @@ const Chats = () => {
         searchQuery={searchQuery}
         handleSearch={handleSearch}
       />
-      <div className="flex-1 flex">
-        <Navbar user={user} isUserLoading={isUserLoading} />
-        <aside className="w-full md:w-1/3 lg:w-1/4 bg-white border-r">
-          <header className="flex items-center justify-between p-4 bg-indigo-500 text-white">
-            <h1 className="text-lg font-bold">Chats</h1>
-            <button
-              aria-label="Add User"
-              title="Add User"
-              onClick={toggleSidePanel}
-              className="p-2 rounded hover:bg-gray-100/20"
-              disabled={isUserLoading}
-            >
-              <IoMdPersonAdd className="w-6 h-6 text-white" />
-            </button>
-          </header>
-          <div className="p-4">
-            <div className="flex items-center px-4 py-2 bg-gray-100 rounded-lg">
-              <FiSearch className="text-gray-500" />
-              <input
-                type="text"
-                placeholder="Search chats"
-                className="w-full text-sm bg-transparent border-none focus:outline-none ml-2"
-                value={searchChatsQuery}
-                onChange={handleSearchChats}
-              />
-            </div>
+
+      <div className="flex-1 flex h-screen">
+        <aside className="w-full md:w-1/3 lg:w-1/3 border-r px-4 bg-[#1f1f21]">
+          <div className="py-4">
+            <Header user={user} />
           </div>
-          <div className="overflow-y-auto h-[calc(100vh-140px)]">
-            {isFetchingChats ? (
-              <ChatSkeleton count={7} />
-            ) : isChatsError ? (
-              <div className="px-4 text-center text-sm font-medium text-gray-700">
-                Error Loading Chats.
+          <ChatSearchBar
+            searchChatsQuery={searchChatsQuery}
+            handleSearchChats={handleSearchChats}
+            toggleSidePanel={toggleSidePanel}
+          />
+          <div className="h-[calc(100vh-180px)] overflow-y-auto">
+            <Tabs defaultValue="active" className="w-full">
+              {/* Tabs List */}
+              <TabsList className="grid grid-cols-3 w-full border-0 bg-transparent">
+                <TabsTrigger
+                  value="active"
+                  className="text-white font-bold border-b-2 border-transparent rounded-none hover:bg-white/10 data-[state=active]:border-white data-[state=active]:hover:bg-transparent data-[state=active]:bg-transparent"
+                >
+                  Active Now
+                </TabsTrigger>
+                <TabsTrigger
+                  value="favorites"
+                  className="text-white font-bold border-b-2 border-transparent rounded-none hover:bg-white/10 data-[state=active]:border-white data-[state=active]:hover:bg-transparent data-[state=active]:bg-transparent"
+                >
+                  Favorites
+                </TabsTrigger>
+                <TabsTrigger
+                  value="all"
+                  className="text-white font-bold border-b-2 border-transparent rounded-none hover:bg-white/10 data-[state=active]:border-white data-[state=active]:hover:bg-transparent data-[state=active]:bg-transparent"
+                >
+                  All
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Tabs Content */}
+              <div className="overflow-y-auto h-full hide-scrollbar">
+                <TabsContent value="active">
+                  {isFetchingChats ? (
+                    <ChatSkeleton count={7} />
+                  ) : isChatsError ? (
+                    <ErrorMessage message="Error loading chats." />
+                  ) : (
+                    <ChatList
+                      chats={chatsData.chats}
+                      accessChat={accessChat}
+                      currentChat={currentChat}
+                      setCurrentChat={setCurrentChat}
+                      searchChatsQuery={searchChatsQuery}
+                    />
+                  )}
+                </TabsContent>
+
+                <TabsContent value="favorites">
+                  <ChatList
+                    chats={chatsData.chats}
+                    accessChat={accessChat}
+                    currentChat={currentChat}
+                    setCurrentChat={setCurrentChat}
+                    searchChatsQuery={searchChatsQuery}
+                  />
+                </TabsContent>
+
+                <TabsContent value="all">
+                  <ChatList
+                    chats={chatsData.chats}
+                    accessChat={accessChat}
+                    currentChat={currentChat}
+                    setCurrentChat={setCurrentChat}
+                    searchChatsQuery={searchChatsQuery}
+                  />
+                </TabsContent>
               </div>
-            ) : chatsData && chatsData.chats.length > 0 ? (
-              <ChatList
-                accessChat={accessChat}
-                currentChat={currentChat}
-                setCurrentChat={setCurrentChat}
-                chats={chatsData.chats}
-                searchChatsQuery={searchChatsQuery}
-              />
-            ) : (
-              chatsData.chats.length === 0 && (
-                <div className="px-4 text-center text-sm font-medium text-gray-700">
-                  No Chats Found. Add a user to start a chat
-                </div>
-              )
-            )}
+            </Tabs>
           </div>
         </aside>
         {currentChat ? (
+          // <div className="h-screen overflow-y-auto">
           <OpenChat currentChat={currentChat} />
-        ) : isAccessingChat ? (
+        ) : // </div>
+        isAccessingChat ? (
           <div>Accessing Chat</div>
         ) : isAccessingChatError ? (
           <div>Couldn&apos;t access chat</div>
@@ -146,5 +173,11 @@ const Chats = () => {
     </div>
   );
 };
-
 export default Chats;
+
+// Generic Error Component
+const ErrorMessage = ({ message }: { message: string }) => (
+  <div className="px-4 text-center text-sm font-medium text-gray-700">
+    {message}
+  </div>
+);

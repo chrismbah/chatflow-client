@@ -3,6 +3,7 @@
 import { toastOptions } from "../config/toast";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const queryClient = new QueryClient();
 
@@ -12,9 +13,16 @@ export default function LayoutClient({
   children: React.ReactNode;
 }>) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster toastOptions={toastOptions} position="bottom-left" />
-      {children}
-    </QueryClientProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <QueryClientProvider client={queryClient}>
+        <Toaster toastOptions={toastOptions} position="bottom-left" />
+        {children}
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

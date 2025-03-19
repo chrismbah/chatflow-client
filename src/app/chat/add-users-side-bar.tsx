@@ -2,11 +2,11 @@
 "use client";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
-import { UsersSkeleton } from "@/components/ui/skeleton";
+import { UsersSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import { useChat } from "@/hooks/use-chat";
 import Loader from "@/components/ui/loader/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { User } from "@/types/user";
+import { User } from "@/types";
 import { IoMdPersonAdd, IoMdCheckmark, IoMdAdd } from "react-icons/io";
 
 const AddUsersSidePanel = ({

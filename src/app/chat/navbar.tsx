@@ -2,7 +2,7 @@ import { FiSettings } from "react-icons/fi";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { AvatarSkeleton } from "@/components/ui/skeleton";
-import { User } from "@/types/user";
+import { User } from "@/types";
 import Image from "next/image";
 
 const Navbar = ({

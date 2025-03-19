@@ -4,7 +4,7 @@ import { IError, errorHandler } from "../utils/responseHandler";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../store/user-store";
-import { User } from "../types/user";
+import { User } from "../types";
 
 interface SignupResponse {
   user: User;
@@ -22,7 +22,6 @@ export const useSignup = () => {
       setUser(user);
       router.push("/auth/login");
       toast.success(`Registration successful.`);
-
     },
     onError: (error: IError) => {
       toast.error(errorHandler(error));
