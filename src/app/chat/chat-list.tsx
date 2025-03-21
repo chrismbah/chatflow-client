@@ -80,8 +80,8 @@ const ChatList = ({
             })
         )
       ) : (
-        <p className="px-4 text-center text-sm font-medium text-gray-700">
-          Couldn&apos;t find user &ldquo;
+        <p className="px-4 text-center text-sm font-medium">
+          Could&apos;nt find user &quot;{" "}
           <label className="font-semibold">{searchChatsQuery}</label>&quot;
         </p>
       )}

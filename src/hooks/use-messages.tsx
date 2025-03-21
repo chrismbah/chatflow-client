@@ -16,7 +16,6 @@ export const useMessages = (chatId: string) => {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  // Fetch initial messages
   const {
     data: initialMessages,
     isError: isMessagesError,

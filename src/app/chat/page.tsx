@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useProfile } from "@/hooks/use-profile";
 import { useChat } from "@/hooks/use-chat";
 import ChatList from "./chat-list";
-import AddUsersSidePanel from "./add-users-side-bar";
+import AddUsersDrawer from "./add-users-drawer";
 import { ChatSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import OpenChat from "./open-chat";
 import WelcomeChat from "./welcome-chat";
@@ -11,11 +11,13 @@ import { useUsers } from "@/hooks/use-users";
 import { Header } from "./header";
 import ChatSearchBar from "./chat-search-bar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import useUserStatus from "@/hooks/use-user-status";
 
 const Chats = () => {
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, isUserLoading } = useProfile();
-
+  const userId: string = user?._id ?? ""; // Fallback to an empty string if user is null
+  const isOnline = useUserStatus(userId);
   const {
     users,
     isUsersError,
@@ -35,7 +37,6 @@ const Chats = () => {
     currentChat,
     setCurrentChat,
   } = useChat();
-
   const [searchChatsQuery, setSearchChatsQuery] = useState("");
 
   const handleSearchChats = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +48,7 @@ const Chats = () => {
   }, [debouncedSearchQuery, refetch]);
 
   const toggleSidePanel = () => {
-    setIsSidePanelOpen((prev) => !prev);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -59,15 +60,15 @@ const Chats = () => {
       chatsData.chats &&
       chatsData.chats.length === 0
     ) {
-      setIsSidePanelOpen(true);
+      setIsSidebarOpen(true);
     }
   }, [chatsData, user, users, isFetchingChats, isChatsError]);
 
   return (
-    <div className="flex h-screen relative bg-[#1b1a1f]">
-      <AddUsersSidePanel
-        isSidePanelOpen={isSidePanelOpen}
-        setIsSidePanelOpen={setIsSidePanelOpen}
+    <div className="flex h-screen relative bg-[#1b1b1c]">
+      <AddUsersDrawer
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
         users={users}
         isFetchingUsers={isFetchingUsers}
         isUsersError={isUsersError}
@@ -78,9 +79,9 @@ const Chats = () => {
       />
 
       <div className="flex-1 flex h-screen">
-        <aside className="w-full md:w-1/3 lg:w-1/3 border-r px-4 bg-[#1f1f21]">
+        <aside className="w-full md:w-1/3 lg:w-1/3 border-r px-4 bg-black">
           <div className="py-4">
-            <Header user={user} />
+            <Header user={user} isOnline={isOnline} />
           </div>
           <ChatSearchBar
             searchChatsQuery={searchChatsQuery}
@@ -117,6 +118,10 @@ const Chats = () => {
                     <ChatSkeleton count={10} />
                   ) : isChatsError ? (
                     <ErrorMessage message="Error loading chats." />
+                  ) : chatsData.chats.length === 0 ? (
+                    <p className="px-4 text-center text-sm font-medium">
+                      No users found
+                    </p>
                   ) : (
                     <ChatList
                       chats={chatsData.chats}

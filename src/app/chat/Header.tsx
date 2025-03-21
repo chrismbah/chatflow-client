@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface HeaderProps {
   user: User | null;
+  isOnline: boolean;
 }
 export const getInitials = (name: string) => {
   const nameParts = name.split(" ");
@@ -21,7 +22,7 @@ export const truncateName = (name: string, maxLength = 15) => {
   return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
 };
 
-export const Header = ({ user }: HeaderProps) => {
+export const Header = ({ user, isOnline }: HeaderProps) => {
   return (
     <header className="flex items-center justify-between">
       {user ? (
@@ -37,9 +38,10 @@ export const Header = ({ user }: HeaderProps) => {
               />
               <AvatarFallback>{getInitials(user.fullName)}</AvatarFallback>
             </Avatar>
-            <div className="w-3 h-3 rounded-full bg-[#52ed68] absolute top-0 -right-[10px] " />
+            {isOnline && (
+              <div className="w-3 h-3 rounded-full bg-[#52ed68] absolute top-0 -right-[10px] " />
+            )}
           </div>
-
           <h2 className="text-2xl font-semibold">
             {truncateName(user.fullName)}
           </h2>

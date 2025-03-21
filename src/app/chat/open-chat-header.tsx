@@ -2,11 +2,12 @@ import { User } from "@/types";
 import React from "react";
 import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import Image from "next/image";
-
+import useUserStatus from "@/hooks/use-user-status";
 interface OpenChatHeaderProps {
   receiver: User;
 }
 export const OpenChatHeader = ({ receiver }: OpenChatHeaderProps) => {
+  const isOnline = useUserStatus(receiver._id);
   return (
     <header className="flex items-center justify-between px-4 py-6 border-b border-[#232227]">
       <div className="flex items-center space-x-4">
@@ -20,14 +21,16 @@ export const OpenChatHeader = ({ receiver }: OpenChatHeaderProps) => {
             className="rounded-full h-full object-cover"
             priority
           />
-          <div className="w-3 h-3 rounded-full bg-[#52ed68] absolute top-0 -right-[6px] " />
+          {isOnline && (
+            <div className="w-3 h-3 rounded-full bg-[#52ed68] absolute top-0 -right-[6px] " />
+          )}
         </div>
 
         <div className="flex flex-col ">
           <h2 className="text-xl font-bold tracking-wide">
             {receiver.fullName}
           </h2>
-          <p className="text-[12px] tracking-wide">Active Now</p>
+          {isOnline && <p className="text-[12px] tracking-wide">Active Now</p>}
         </div>
       </div>
       <div className="flex items-center space-x-4">
@@ -37,7 +40,6 @@ export const OpenChatHeader = ({ receiver }: OpenChatHeaderProps) => {
     </header>
   );
 };
-
 
 // export const OpenChatHeaderSkeleton = () => {
 //   return (

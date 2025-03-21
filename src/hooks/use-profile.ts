@@ -23,6 +23,7 @@ export const useProfile = () => {
     if (data) {
       setUser(data.data);
     }
+    console.log("User data:",data)
   }, [data, setUser]);
 
   return {

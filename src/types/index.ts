@@ -4,6 +4,8 @@ export interface User {
   email: string;
   avatar: string;
   isAdmin: boolean;
+  lastActive: Date;
+  isOnline: boolean;
 }
 
 export interface Chat {

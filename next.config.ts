@@ -7,13 +7,25 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "avatar.iran.liara.run",
         port: "",
-        pathname: "/public/**", // Adjusted to match `/public`
+        pathname: "/public/**",
       },
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com", // Google profile images
+        hostname: "lh3.googleusercontent.com",
         port: "",
-        pathname: "/**", // Allows all paths under this domain
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com", // GitHub Avatars
+        port: "",
+        pathname: "/**", // Allow all paths under this domain
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+        port: "",
+        pathname: "/**", // Allow all paths under this domain
       },
     ],
   },
