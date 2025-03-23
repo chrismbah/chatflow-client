@@ -72,7 +72,7 @@ const MessageInput = ({
             }
           }}
           placeholder="Write a message..."
-          className="hide-scrollbar w-full placeholder:text-[#4e4f55] px-16 py-5 bg-[#26262e] h-[70px] flex items-center justify-center border rounded-lg focus:outline-none focus:ring-0 resize-none"
+          className="hide-scrollbar w-full placeholder:text-[#4e4f55] px-16 py-5 bg-black h-[70px] flex items-center justify-center border rounded-lg focus:outline-none focus:ring-0 resize-none"
           rows={1}
           aria-label="Message input"
         ></textarea>

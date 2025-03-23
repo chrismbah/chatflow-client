@@ -3,6 +3,8 @@ import React from "react";
 import { FiSearch, FiArrowLeft, FiMoreVertical } from "react-icons/fi";
 import Image from "next/image";
 import useUserStatus from "@/hooks/use-user-status";
+import { getLastActiveStatus } from "@/utils";
+
 interface OpenChatHeaderProps {
   receiver: User;
 }
@@ -30,7 +32,13 @@ export const OpenChatHeader = ({ receiver }: OpenChatHeaderProps) => {
           <h2 className="text-xl font-bold tracking-wide">
             {receiver.fullName}
           </h2>
-          {isOnline && <p className="text-[12px] tracking-wide">Active Now</p>}
+          {isOnline ? (
+            <p className="text-[12px] tracking-wide">Active Now</p>
+          ) : (
+            <p className="text-[12px] tracking-wide">
+              {getLastActiveStatus(receiver.lastActive)}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex items-center space-x-4">

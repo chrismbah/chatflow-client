@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { UsersSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import { useChat } from "@/hooks/use-chat";
-import Loader from "@/components/ui/loader/Loader";
+import { Loader, SearchLoader } from "@/components/ui/loader/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { User } from "@/types";
+import { Chat, User } from "@/types";
 import { UserPlus, CheckCircle, X, GripHorizontal, Search } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ const AddUsersCornerDrawer = ({
   handleSearch,
   isSidebarOpen,
   setIsSidebarOpen,
+  currentChat,
 }: {
   users?: User[];
   isFetchingUsers: boolean;
@@ -33,6 +34,7 @@ const AddUsersCornerDrawer = ({
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isSidebarOpen: boolean) => void;
+  currentChat: Chat | null;
 }) => {
   const { createUserChat, loadingUsers } = useChat();
   const [addedUsers, setAddedUsers] = useState<Set<string>>(new Set());
@@ -45,7 +47,7 @@ const AddUsersCornerDrawer = ({
   return (
     <>
       {/* Floating action button always visible */}
-      {!isSidebarOpen && (
+      {!isSidebarOpen && !currentChat && (
         <Button
           variant="outline"
           className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 z-40"
@@ -58,7 +60,7 @@ const AddUsersCornerDrawer = ({
       {/* Custom drawer without SheetContent overlay */}
       <div
         className={cn(
-          "fixed bottom-0 right-0 z-50 w-[30%] h-[70vh] hide-scrollbar transform transition-transform duration-300 ease-in-out",
+          "fixed bottom-3 right-3 z-50 w-[30%] h-[70vh] hide-scrollbar transform transition-transform duration-300 ease-in-out",
           isSidebarOpen ? "translate-y-0" : "translate-y-full"
         )}
       >
@@ -100,12 +102,17 @@ const AddUsersCornerDrawer = ({
               id="user-list-container"
               className="h-full overflow-y-auto custom-scrollbar pr-1"
             >
-              {isFetchingUsers ? (
-                <div className="px-3">
-                  <UsersSkeleton count={5} />
+              {isFetchingUsers && searchQuery === "" ? (
+                <div className="px-5">
+                  <UsersSkeleton count={10} />
+                </div>
+              ) : isFetchingUsers && searchQuery !== "" ? (
+                <div className="px-5 flex items-center justify-center gap-2 ">
+                  <SearchLoader className="w-6 h-6" />{" "}
+                  <p className="text-sm font-medium ">Searching for Users</p>
                 </div>
               ) : isUsersError ? (
-                <div className="p-4 text-center text-sm text-muted-foreground">
+                <div className="p-5 text-center text-sm text-muted-foreground">
                   Error loading users
                 </div>
               ) : users && users.length === 0 ? (
@@ -124,7 +131,11 @@ const AddUsersCornerDrawer = ({
                     dataLength={users.length}
                     next={fetchNextPage}
                     hasMore={hasNextPage}
-                    loader={<UsersSkeleton count={1} />}
+                    loader={
+                      <div className="px-5">
+                        <UsersSkeleton count={2} />
+                      </div>
+                    }
                     scrollableTarget="user-list-container"
                   >
                     <ul className="space-y-1 p-2">
@@ -157,9 +168,21 @@ const AddUsersCornerDrawer = ({
                           </div>
 
                           {loadingUsers.includes(user._id) ? (
-                            <Loader className="h-5 w-5 text-primary" />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full hover:bg-none"
+                            >
+                              <Loader className="h-4 w-4 text-primary" />
+                            </Button>
                           ) : addedUsers.has(user._id) ? (
-                            <CheckCircle className="h-5 w-5 text-green-500" />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full hover:bg-none"
+                            >
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            </Button>
                           ) : (
                             <Button
                               variant="ghost"

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { ChangeEvent } from "react";
-import { FiSearch } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
+import { Search } from "lucide-react";
 
 interface SearchBarProps {
   searchChatsQuery: string;
@@ -15,16 +15,17 @@ const ChatSearchBar = ({
   toggleSidePanel,
 }: SearchBarProps) => {
   return (
-    <div className="my-3 flex items-center gap-2 w-full">
-      <div className="relative flex-1">
-        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7f7e81]" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="pl-10 rounded-full bg-[#2a2a2c] border-none focus:outline-none focus-visible:ring-0 focus-visible:border-none"
-          value={searchChatsQuery}
-          onChange={handleSearchChats}
-        />
+    <div className="my-2 flex items-center gap-2 w-full">
+      <div className="flex-1">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search chats..."
+            className="pl-9 h-10"
+            value={searchChatsQuery}
+            onChange={handleSearchChats}
+          />
+        </div>
       </div>
       <button
         onClick={toggleSidePanel}

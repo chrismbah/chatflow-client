@@ -65,7 +65,7 @@ const Chats = () => {
   }, [chatsData, user, users, isFetchingChats, isChatsError]);
 
   return (
-    <div className="flex h-screen relative bg-[#1b1b1c]">
+    <div className="flex h-screen relative bg-[#0a0a0a]">
       <AddUsersDrawer
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
@@ -76,9 +76,10 @@ const Chats = () => {
         hasNextPage={hasNextPage}
         searchQuery={searchQuery}
         handleSearch={handleSearch}
+        currentChat={currentChat}
       />
 
-      <div className="flex-1 flex h-screen">
+      <div className="flex-1 flex h-screen bg-black">
         <aside className="w-full md:w-1/3 lg:w-1/3 border-r px-4 bg-black">
           <div className="py-4">
             <Header user={user} isOnline={isOnline} />
@@ -119,9 +120,12 @@ const Chats = () => {
                   ) : isChatsError ? (
                     <ErrorMessage message="Error loading chats." />
                   ) : chatsData.chats.length === 0 ? (
-                    <p className="px-4 text-center text-sm font-medium">
-                      No users found
-                    </p>
+                    <div className="px-4 text-center text-sm font-medium">
+                      <p>No conversations yet</p>
+                      <p className="text-xs">
+                        Start a new chat to begin messaging
+                      </p>
+                    </div>
                   ) : (
                     <ChatList
                       chats={chatsData.chats}

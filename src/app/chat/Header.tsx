@@ -42,9 +42,14 @@ export const Header = ({ user, isOnline }: HeaderProps) => {
               <div className="w-3 h-3 rounded-full bg-[#52ed68] absolute top-0 -right-[10px] " />
             )}
           </div>
-          <h2 className="text-2xl font-semibold">
-            {truncateName(user.fullName)}
-          </h2>
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-semibold">
+              {truncateName(user.fullName)}
+            </h2>
+            <p className="text-sm font-medium text-gray-300">
+              {isOnline ? "Online" : "Offline"}
+            </p>
+          </div>
         </div>
       ) : (
         <HeaderSkeleton />

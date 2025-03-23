@@ -15,7 +15,7 @@ export const useMessages = (chatId: string) => {
   const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
-
+  // const [latestMessages, setlatestMessages] = useState<Messages[]>([]);
   const {
     data: initialMessages,
     isError: isMessagesError,
@@ -71,6 +71,7 @@ export const useMessages = (chatId: string) => {
               : msg
           )
         );
+        console.log(localMessages);
 
         if (!socket) return console.log("Socket is null");
         // Emit the new message

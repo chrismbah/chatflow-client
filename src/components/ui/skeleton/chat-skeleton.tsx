@@ -1,6 +1,7 @@
 import React from "react";
-import { IoMdPersonAdd } from "react-icons/io"; // Assuming you want the same icon for the button
 import { Skeleton } from "@/components/ui/skeleton";
+import { UserPlus } from "lucide-react";
+import { Button } from "../button";
 
 interface ChatSkeletonProps {
   count: number; // Number of skeletons to display
@@ -48,22 +49,21 @@ export const ChatSkeleton = ({ count }: ChatSkeletonProps) => {
 
 export const UsersSkeleton = ({ count }: UsersSkeletonProps) => {
   const skeletons = Array.from({ length: count }, (_, index) => (
-    <li
-      key={index}
-      className="flex items-center justify-between py-4 cursor-pointer animate-pulse"
-    >
-      <div className="flex items-center space-x-4">
-        <AvatarSkeleton className="rounded-full" />
-        <div className="flex flex-col gap-1">
-          <div className="h-4 bg-gray-300 rounded w-32"></div>
-          <div className="h-3 bg-gray-300 rounded w-48"></div>
+    <li key={index} className="flex items-center justify-between py-2">
+      <div className="flex items-center gap-3">
+        <Skeleton className="w-9 h-9 rounded-full" />
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-3.5 w-32 " />
+          <Skeleton className="h-2.5 w-48 " />
         </div>
       </div>
-      <div className="text-right">
-        <div className="w-10 h-10 rounded-full flex items-center justify-center">
-          <IoMdPersonAdd className="w-[26px] h-[26px] text-gray-300" />
-        </div>
-      </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 rounded-full hover:bg-primary/10"
+      >
+        <UserPlus className="h-4 w-4 text-primary" />
+      </Button>
     </li>
   ));
 
@@ -88,7 +88,7 @@ export const MessagesSkeleton = ({ count }: { count: number }) => {
                 isSender ? "flex-row-reverse" : "flex-row"
               } gap-2`}
             >
-              {<Skeleton className="w-8 h-8 rounded-full" />}
+              <Skeleton className="w-8 h-8 rounded-full" />
               <div
                 className={`flex flex-col gap-1 ${
                   isSender ? "items-end" : "items-start"
