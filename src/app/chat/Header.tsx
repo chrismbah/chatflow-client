@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface HeaderProps {
   user: User | null;
   isOnline: boolean;
+  totalUnreadCount: number;
 }
 export const getInitials = (name: string) => {
   const nameParts = name.split(" ");
@@ -22,7 +23,7 @@ export const truncateName = (name: string, maxLength = 15) => {
   return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
 };
 
-export const Header = ({ user, isOnline }: HeaderProps) => {
+export const Header = ({ user, isOnline, totalUnreadCount }: HeaderProps) => {
   return (
     <header className="flex items-center justify-between">
       {user ? (
@@ -55,7 +56,14 @@ export const Header = ({ user, isOnline }: HeaderProps) => {
         <HeaderSkeleton />
       )}
       <div className="flex items-center gap-4">
-        <LuBell className="text-[#89888a] text-[22px] font-bold" />
+        <div className="relative w-ful h-full">
+          <LuBell className="text-[#89888a] text-[22px] font-bold" />
+          {totalUnreadCount > 0 && (
+            <div className="absolute top-[-10px] right-[-10px] flex items-center justify-center p-1 w-4 h-4 rounded-full bg-red-500 text-xs text-white font-bold">
+              {totalUnreadCount}
+            </div>
+          )}
+        </div>
         <BsThreeDots className="text-[#89888a] text-[22px] font-bold " />
       </div>
     </header>

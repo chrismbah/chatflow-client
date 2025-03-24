@@ -63,8 +63,7 @@ const ChatList = ({
                   key={`${chat._id}-${member._id}`}
                   onClick={() => setCurrentChat(chat)}
                   className={`mb-2 flex items-center justify-between p-4 rounded-lg transition duration-200 cursor-pointer relative 
-                    ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}
-                    ${unreadCount > 0 && !isSelected ? "bg-indigo-50/5" : ""}`}
+                    ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}`}
                 >
                   <div className="flex items-center space-x-4">
                     <Image
@@ -78,7 +77,7 @@ const ChatList = ({
                       <p
                         className={`font-semibold truncate ${
                           unreadCount > 0 && !isSelected
-                            ? "text-indigo-500"
+                            ? "text-indigo-400"
                             : ""
                         }`}
                         title={member.fullName}

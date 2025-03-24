@@ -170,13 +170,11 @@ export const useMessages = (chatId: string) => {
                 }
           )
         );
-        toast.success("Just updated the state");
       } else {
-        toast.error("Someting is wrong");
+        toast.error("Something is wrong");
       }
     };
 
-    // Fix the event name to match server (message_received, not message_recieved)
     socket.on("message_received", handleReceiveMessage);
     socket.on("messages_read", handleReadMessages);
     socket.on("typing", handleTyping);
@@ -190,7 +188,7 @@ export const useMessages = (chatId: string) => {
     };
   }, [socket, chatId, user, typingUsers]);
 
-  // Emit typing events
+  // Typing events
   useEffect(() => {
     if (!socket || !chatId || !user) return;
 
@@ -204,7 +202,7 @@ export const useMessages = (chatId: string) => {
         // Set new timeout for stop typing
         typingTimeout = setTimeout(() => {
           socket.emit("stop_typing", { chatId, userId: user._id });
-        }, 1500);
+        }, 1000);
       } else {
         // If message is empty, stop typing immediately
         socket.emit("stop_typing", { chatId, userId: user._id });
