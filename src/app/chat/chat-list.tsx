@@ -1,24 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { useProfile } from "@/hooks/use-profile";
 import Image from "next/image";
-import { Chat } from "@/types";
+import { Chat, Message, User } from "@/types";
 import moment from "moment";
-
 
 const ChatList = ({
   chats,
   setCurrentChat,
   currentChat,
   searchChatsQuery,
+  unreadCounts,
+  latestUnreadMessages,
+  user,
 }: {
   chats: Chat[];
   setCurrentChat: (payload: any) => void;
   currentChat: Chat | null;
   searchChatsQuery: string;
+  unreadCounts: Record<string, number>;
+  latestUnreadMessages: Record<string, Message>;
+  user: User | null;
 }) => {
-  const { user } = useProfile();
-
   // Filter chats based on searchChatsQuery
   const filteredChats = chats?.filter(
     (chat) =>
@@ -38,14 +40,31 @@ const ChatList = ({
         filteredChats.map((chat) =>
           chat.users
             ?.filter((member) => member._id !== user?._id)
-            .map((member, i) => {
+            .map((member) => {
               const isSelected = currentChat && currentChat._id === chat._id;
+              const unreadCount = unreadCounts[chat._id] || 0;
+
+              // Choose which message to display - either the latest unread or the chat's latest message
+              const latestUnreadMessage = latestUnreadMessages[chat._id];
+              const displayMessage =
+                latestUnreadMessage?.content ||
+                chat.latestMessage?.content ||
+                "Tap to add new chat";
+
+              // Choose which timestamp to display
+              const messageTime =
+                latestUnreadMessage?.createdAt || chat.latestMessage?.createdAt;
+              const formattedTime = messageTime
+                ? moment(messageTime).format("h:mm A")
+                : "";
+
               return (
                 <div
                   key={`${chat._id}-${member._id}`}
                   onClick={() => setCurrentChat(chat)}
                   className={`mb-2 flex items-center justify-between p-4 rounded-lg transition duration-200 cursor-pointer relative 
-                    ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}`}
+                    ${isSelected ? "bg-gray-100/10" : "hover:bg-gray-100/5"}
+                    ${unreadCount > 0 && !isSelected ? "bg-indigo-50/5" : ""}`}
                 >
                   <div className="flex items-center space-x-4">
                     <Image
@@ -57,24 +76,33 @@ const ChatList = ({
                     />
                     <div className="flex flex-col w-[65%]">
                       <p
-                        className="font-semibold truncate"
+                        className={`font-semibold truncate ${
+                          unreadCount > 0 && !isSelected
+                            ? "text-indigo-500"
+                            : ""
+                        }`}
                         title={member.fullName}
                       >
                         {member.fullName}
                       </p>
-                      <p className="text-[12px] truncate text-gray-400 font-normal">
-                        {chat.latestMessage?.content ?? "Tap to add new chat"}
+                      <p
+                        className={`text-[12px] truncate ${
+                          unreadCount > 0 && !isSelected
+                            ? "text-gray-700 font-medium"
+                            : "text-gray-400 font-normal"
+                        }`}
+                      >
+                        {displayMessage}
                       </p>
                     </div>
                   </div>
                   <div className="absolute top-0 right-0 z-2 text-right p-4 flex flex-col items-end">
-                    <p className="text-xs text-gray-400">
-                      {moment(chat.latestMessage?.createdAt).format("h:mm A") ??
-                        ""}
-                    </p>
-                    <span className="w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold text-white bg-indigo-500">
-                      {i + 1}
-                    </span>
+                    <p className="text-xs text-gray-400">{formattedTime}</p>
+                    {unreadCount > 0 && !isSelected ? (
+                      <span className="w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold text-white bg-indigo-500">
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               );
@@ -89,4 +117,5 @@ const ChatList = ({
     </div>
   );
 };
+
 export default ChatList;

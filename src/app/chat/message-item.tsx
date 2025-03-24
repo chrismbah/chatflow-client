@@ -3,6 +3,7 @@ import { Message, User } from "@/types";
 import Image from "next/image";
 import moment from "moment";
 import { IoCheckmark, IoCheckmarkDone, IoTimeOutline } from "react-icons/io5";
+import { motion } from "framer-motion";
 
 interface MessageItemProps {
   message: Message;
@@ -13,7 +14,7 @@ interface MessageItemProps {
 const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
   const isSender = message.sender._id === currentUser?._id;
 
-  // Handle message status display
+  // Message status icon logic
   const getMessageStatusIcon = () => {
     if (!receiver || message.sender._id !== currentUser?._id) return null;
 
@@ -27,7 +28,10 @@ const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className={`flex message-item ${
         isSender ? "justify-end" : "justify-start"
       } mb-2`}
@@ -45,10 +49,13 @@ const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
           className="rounded-full"
         />
 
-        <div
+        <motion.div
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.2 }}
           className={`flex flex-col gap-1 ${
             isSender ? "items-end" : "items-start"
-          } `}
+          }`}
         >
           <div
             className={`relative max-w-xs p-2 break-words rounded-t-lg ${
@@ -69,9 +76,9 @@ const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
             </div>
             {getMessageStatusIcon()}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

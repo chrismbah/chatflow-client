@@ -4,7 +4,7 @@ import UserAdd from "@/components/icons/UserAdd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema, loginSchema } from "../../../schema/auth";
-import Loader from "@/components/ui/loader/Loader";
+import { Loader } from "@/components/ui/loader/Loader";
 import { useLogin } from "@/hooks/use-login";
 import { handleGoogleRedirect } from "@/utils";
 

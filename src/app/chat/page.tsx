@@ -36,6 +36,8 @@ const Chats = () => {
     isChatsError,
     currentChat,
     setCurrentChat,
+    unreadCounts,
+    latestUnreadMessages,
   } = useChat();
   const [searchChatsQuery, setSearchChatsQuery] = useState("");
 
@@ -132,6 +134,9 @@ const Chats = () => {
                       currentChat={currentChat}
                       setCurrentChat={setCurrentChat}
                       searchChatsQuery={searchChatsQuery}
+                      unreadCounts={unreadCounts}
+                      latestUnreadMessages={latestUnreadMessages}
+                      user={user}
                     />
                   )}
                 </TabsContent>
@@ -142,6 +147,9 @@ const Chats = () => {
                     currentChat={currentChat}
                     setCurrentChat={setCurrentChat}
                     searchChatsQuery={searchChatsQuery}
+                    unreadCounts={unreadCounts}
+                    latestUnreadMessages={latestUnreadMessages}
+                    user={user}
                   />
                 </TabsContent>
 
@@ -151,6 +159,9 @@ const Chats = () => {
                     currentChat={currentChat}
                     setCurrentChat={setCurrentChat}
                     searchChatsQuery={searchChatsQuery}
+                    unreadCounts={unreadCounts}
+                    latestUnreadMessages={latestUnreadMessages}
+                    user={user}
                   />
                 </TabsContent>
               </div>
