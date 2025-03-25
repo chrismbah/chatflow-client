@@ -39,9 +39,9 @@ const AddUsersCornerDrawer = ({
   const { createUserChat, loadingUsers } = useChat();
   const [addedUsers, setAddedUsers] = useState<Set<string>>(new Set());
 
-  const createAndAddChat = async (userId: string) => {
-    createUserChat(userId);
-    setAddedUsers((prev) => new Set(prev).add(userId)); // Mark user as added
+  const createAndAddChat = async (user: User) => {
+    createUserChat(user);
+    setAddedUsers((prev) => new Set(prev).add(user._id));
   };
 
   return (
@@ -93,6 +93,7 @@ const AddUsersCornerDrawer = ({
                 className="pl-9 h-10"
                 value={searchQuery}
                 onChange={handleSearch}
+                disabled={isFetchingUsers}
               />
             </div>
           </div>
@@ -188,7 +189,7 @@ const AddUsersCornerDrawer = ({
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 rounded-full hover:bg-primary/10"
-                              onClick={() => createAndAddChat(user._id)}
+                              onClick={() => createAndAddChat(user)}
                               disabled={loadingUsers.includes(user._id)}
                             >
                               <UserPlus className="h-4 w-4 text-primary" />
@@ -204,8 +205,6 @@ const AddUsersCornerDrawer = ({
           </CardContent>
         </Card>
       </div>
-
-      {/* Optional click-outside handler */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 z-40"

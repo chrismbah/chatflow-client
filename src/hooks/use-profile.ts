@@ -13,7 +13,7 @@ export const useProfile = () => {
   const setUser = useUserStore((state) => state.setUser);
 
   const { data, error, isLoading, refetch } = useQuery<ProfileResponse>({
-    queryKey: [USER.FETCH_PROFILE],
+    queryKey: [USER.FETCH_PROFILE], 
     queryFn: getUserProfile,
     retry: true,
   });
@@ -23,7 +23,6 @@ export const useProfile = () => {
     if (data) {
       setUser(data.data);
     }
-    console.log("User data:",data)
   }, [data, setUser]);
 
   return {

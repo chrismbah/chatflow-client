@@ -29,9 +29,9 @@ const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      // initial={{ opacity: 0, y: 10, scale: 0.80 }}
+      // animate={{ opacity: 1, y: 0, scale: 1 }}
+      // transition={{ duration: 0.3, ease: "easeOut" }}
       className={`flex message-item ${
         isSender ? "justify-end" : "justify-start"
       } mb-2`}
@@ -50,7 +50,7 @@ const MessageItem = ({ message, currentUser, receiver }: MessageItemProps) => {
         />
 
         <motion.div
-          initial={{ scale: 0.95 }}
+          initial={{ scale: 0.80 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.2 }}
           className={`flex flex-col gap-1 ${

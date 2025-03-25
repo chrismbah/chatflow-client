@@ -7,12 +7,13 @@ interface SearchBarProps {
   searchChatsQuery: string;
   handleSearchChats: (e: ChangeEvent<HTMLInputElement>) => void;
   toggleSidePanel: VoidFunction;
+  isFetchingChats: boolean 
 }
 
 const ChatSearchBar = ({
   searchChatsQuery,
   handleSearchChats,
-  toggleSidePanel,
+  toggleSidePanel, isFetchingChats
 }: SearchBarProps) => {
   return (
     <div className="my-2 flex items-center gap-2 w-full">
@@ -24,6 +25,7 @@ const ChatSearchBar = ({
             className="pl-9 h-10"
             value={searchChatsQuery}
             onChange={handleSearchChats}
+            disabled={isFetchingChats}
           />
         </div>
       </div>

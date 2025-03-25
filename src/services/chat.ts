@@ -1,12 +1,13 @@
 import axiosInstance from "@/config/axios";
+import { User } from "@/types";
 
 export const fetchAllChats = async () => {
   const res = await axiosInstance.get("/chat");
   return res.data.data;
 };
 
-export const createChat = async (userId: string) => {
+export const createChat = async (user: User) => {
+  const userId = user._id;
   const res = await axiosInstance.post("/chat", { userId });
-  console.log("Accessing chat..");
   return res.data.data;
 };

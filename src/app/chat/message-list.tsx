@@ -5,6 +5,7 @@ import MessageItem from "./message-item";
 import TypingIndicator from "@/components/ui/TypingIndicator";
 import { MessagesSkeleton } from "@/components/ui/skeleton/chat-skeleton";
 import ChatBadge from "./chat-badge";
+import Image from "next/image";
 
 interface MessagesListProps {
   messages: Message[];
@@ -52,8 +53,15 @@ const MessagesList = ({
         ))
       )}
 
-      {isTyping && (
-        <div className="flex justify-start">
+      {isTyping && receiver && (
+        <div className="flex gap-2 justify-start">
+          <Image
+            src={receiver.avatar}
+            alt={receiver.fullName}
+            width={35}
+            height={35}
+            className="rounded-full"
+          />
           <TypingIndicator />
         </div>
       )}

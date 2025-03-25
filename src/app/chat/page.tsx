@@ -16,7 +16,7 @@ import useUserStatus from "@/hooks/use-user-status";
 const Chats = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, isUserLoading } = useProfile();
-  const userId: string = user?._id ?? ""; 
+  const userId: string = user?._id ?? "";
   const isOnline = useUserStatus(userId);
   const {
     users,
@@ -37,7 +37,8 @@ const Chats = () => {
     currentChat,
     setCurrentChat,
     unreadCounts,
-    latestUnreadMessages, totalUnreadCount
+    latestUnreadMessages,
+    totalUnreadCount,
   } = useChat();
   const [searchChatsQuery, setSearchChatsQuery] = useState("");
 
@@ -84,12 +85,17 @@ const Chats = () => {
       <div className="flex-1 flex h-screen bg-black">
         <aside className="w-full md:w-1/3 lg:w-1/3 border-r px-4 bg-black">
           <div className="py-4">
-            <Header user={user} isOnline={isOnline} totalUnreadCount={totalUnreadCount} />
+            <Header
+              user={user}
+              isOnline={isOnline}
+              totalUnreadCount={totalUnreadCount}
+            />
           </div>
           <ChatSearchBar
             searchChatsQuery={searchChatsQuery}
             handleSearchChats={handleSearchChats}
             toggleSidePanel={toggleSidePanel}
+            isFetchingChats={isFetchingChats}
           />
           <div className="h-[calc(100vh-180px)] overflow-y-auto hide-scrollbar">
             <Tabs defaultValue="active" className="w-full">
